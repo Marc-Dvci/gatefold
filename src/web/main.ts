@@ -5,12 +5,14 @@ import { chainView } from "./views/chain";
 import { howView } from "./views/how";
 import { instrumentsView } from "./views/instruments";
 import { listenView } from "./views/listen";
+import { playView } from "./views/play";
 import { studioView } from "./views/studio";
 
 const NAV: Array<[string, string]> = [
   ["#/listen", "Listen"],
   ["#/studio", "Studio"],
   ["#/instruments", "Instruments"],
+  ["#/play", "Play"],
   ["#/chain", "X Layer"],
   ["#/how", "Liner notes"],
 ];
@@ -56,6 +58,10 @@ function route(): void {
     case "instruments":
       dispose = instrumentsView(main);
       document.title = "Instruments · Gatefold";
+      break;
+    case "play":
+      dispose = playView(main);
+      document.title = "Hall Run · Gatefold";
       break;
     case "chain":
       dispose = chainView(main);

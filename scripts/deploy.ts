@@ -412,7 +412,7 @@ async function main(): Promise<void> {
     };
     const depFile = join(ROOT, FORK ? "deployments/xlayer-fork.json" : "deployments/xlayer.json");
     writeFileSync(depFile, JSON.stringify(deployment, null, 2) + "\n");
-    const build = spawnSync("npx", ["vite", "build"], { cwd: ROOT, shell: true, stdio: "ignore", env: { ...process.env, GATEFOLD_DEPLOYMENT_FILE: depFile } });
+    const build = spawnSync("npm", ["run", "build"], { cwd: ROOT, shell: true, stdio: "ignore", env: { ...process.env, GATEFOLD_DEPLOYMENT_FILE: depFile } });
     if (build.status !== 0) throw new Error("the site build failed");
     const files = siteFiles(join(ROOT, "dist"));
     const hostId = songIds[SITE_HOST_SONG]!;

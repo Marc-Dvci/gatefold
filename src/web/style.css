@@ -795,6 +795,32 @@ table.sample {
   margin-top: 0.8rem;
 }
 
+/* Play */
+.game {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 1px solid var(--rule);
+  touch-action: none;
+}
+
+.hud {
+  font-family: var(--mono);
+  color: var(--teal);
+  margin: 0;
+}
+
+pre.code {
+  background: #0e1118;
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  font-size: 0.88rem;
+  max-width: 760px;
+}
+
 /* Liner notes */
 .steps {
   list-style: none;

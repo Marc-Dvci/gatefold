@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "gatefold-theme",
+    "title": "Gatefold",
+    "seconds": 27.4,
+    "rows": 256,
+    "nand": 889,
+    "latch": 28,
+    "refs": 5,
+    "bytes": 6865,
+    "gatesWithInstruments": 3381,
+    "stateBits": 181,
+    "cdWavBytes": 2418840,
+    "smallerBy": 352
+  },
+  {
+    "slug": "mountain-king",
+    "title": "In the Hall of the Mountain King",
+    "seconds": 33.1,
+    "rows": 256,
+    "nand": 836,
+    "latch": 28,
+    "refs": 6,
+    "bytes": 6600,
+    "gatesWithInstruments": 3629,
+    "stateBits": 217,
+    "cdWavBytes": 2919346,
+    "smallerBy": 442
+  },
+  {
+    "slug": "ode-to-joy",
+    "title": "Ode to Joy",
+    "seconds": 29.1,
+    "rows": 256,
+    "nand": 752,
+    "latch": 28,
+    "refs": 5,
+    "bytes": 5906,
+    "gatesWithInstruments": 3244,
+    "stateBits": 181,
+    "cdWavBytes": 2565606,
+    "smallerBy": 434
+  }
+]

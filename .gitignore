@@ -24,3 +24,7 @@ contracts/broadcast/*/31337/
 # Scratch work, runs and anything made for the film stay outside the repository
 scratch/
 *.log
+
+# Audio renders: the MP3s are committed, the WAVs go on the release
+examples/audio/*.wav
+examples/audio/*.ogg
