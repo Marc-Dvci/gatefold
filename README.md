@@ -27,7 +27,7 @@ uses.**
 | Innovation | Sound as a new medium for TapeOut circuits: the [compiler](src/core/song.ts#L157), the [ROM as a reduced decision diagram](src/core/arith.ts#L136-L177), REF composition of [instrument circuits](src/core/instruments.ts), and [royalties along the REF lineage](contracts/src/GatefoldRecords.sol#L248-L262) |
 | Ecosystem integration | [How TapeOut and X Layer are used](#how-tapeout-and-x-layer-are-used) · [the full release, rehearsed on a fork of X Layer](docs/EVIDENCE.md#1-the-full-release-on-a-fork-of-x-layer-mainnet) · [the site written into a DeWEB container](scripts/deploy.ts#L662) |
 | Product readiness and UX | Six pages ([screens](#see-it-work)) covering the whole journey: write, play, tape out, steer from a game, license, withdraw; [10 browser tests with axe-core](e2e/app.spec.ts), a [no-install quickstart](#run-it) and a Docker image |
-| Demo video | [The film, 2:24](https://github.com/Marc-Dvci/gatefold/releases/download/v1.0.0/gatefold-film.mp4) |
+| Demo video | [The film on YouTube, 2:24](https://youtu.be/TkMQJvZl_fs) |
 
 ## See it work
 
