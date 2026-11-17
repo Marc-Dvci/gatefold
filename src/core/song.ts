@@ -244,23 +244,33 @@ export function compileSong(song: Song, lib: Library): CompiledSong {
       trig[ev.row] = 1;
       last[ev.row + ev.rows - 1] = 1;
     }
+    const modes = new Array<number>(rows).fill(0);
+    const modeOf = (ev: { tone: number; decay: number }): number =>
+      (ev.tone >= 0 ? ev.tone : tone) | ((ev.decay >= 0 ? ev.decay : decay) << 2);
+    for (const ev of part.notes) for (let r = ev.row; r < ev.row + ev.rows && r < rows; r++) modes[r] = modeOf(ev);
     const usedVols = new Set(part.notes.map((x) => x.vol));
+    const usedModes = new Set(part.notes.map(modeOf));
     const constVol = usedVols.size <= 1 ? (part.notes[0]?.vol ?? 0) : -1;
+    const constMode = usedModes.size <= 1 ? (part.notes[0] ? modeOf(part.notes[0]) : tone | (decay << 2)) : -1;
     const legato = release >= 1;
+    const volAt = idxBits + 2;
+    const modeAt = volAt + (constVol >= 0 ? 0 : 4);
     const words = noteIdx.map(
       (k, r) =>
-        k |
-        (trig[r]! << idxBits) |
-        ((legato ? 0 : last[r]!) << (idxBits + 1)) |
-        ((constVol >= 0 ? 0 : vols[r]!) << (idxBits + 2)),
+        k +
+        trig[r]! * 2 ** idxBits +
+        (legato ? 0 : last[r]!) * 2 ** (idxBits + 1) +
+        (constVol >= 0 ? 0 : vols[r]!) * 2 ** volAt +
+        (constMode >= 0 ? 0 : modes[r]!) * 2 ** modeAt,
     );
-    const width = idxBits + 2 + (constVol >= 0 ? 0 : 4);
+    const width = modeAt + (constMode >= 0 ? 0 : 4);
     n.region = `${ch.name} score`;
     const fields = rom(n, pos, words, width);
     const idx = fields.slice(0, idxBits);
     const trigBit = fields[idxBits]!;
     const lastBit = fields[idxBits + 1]!;
-    const vol = constVol >= 0 ? konst(4, constVol) : fields.slice(idxBits + 2, idxBits + 6);
+    const vol = constVol >= 0 ? konst(4, constVol) : fields.slice(volAt, volAt + 4);
+    const mode = constMode >= 0 ? konst(4, constMode) : fields.slice(modeAt, modeAt + 4);
 
     n.region = `${ch.name} pitch`;
     const inc = rom(n, idx, [0, ...distinct], INC_BITS);
@@ -274,7 +284,6 @@ export function compileSong(song: Song, lib: Library): CompiledSong {
     n.region = `${ch.name} control`;
     const g = n.and(on, layerOn);
     const attack = n.and(trigBit, first);
-    const mode = konst(4, tone | (decay << 2));
     const ins: Sig[] = [...inc, attack, g, tick, ...vol, ...mode];
     if (ins.length !== VOICE_IN) throw new Error("internal: voice interface width");
     const amp = n.ref(inst.target, ins, `${ch.name}`);

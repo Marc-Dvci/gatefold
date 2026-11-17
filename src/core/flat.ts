@@ -28,6 +28,8 @@ export interface Instance {
   /** First and last+1 state bits of this instance's block. */
   stateStart: number;
   stateEnd: number;
+  /** Nodes that carry this instance's outputs (for a REF instance: the voice's amplitude bits). */
+  outputs: number[];
 }
 
 export interface FlatProgram {
@@ -40,6 +42,8 @@ export interface FlatProgram {
   b: Int32Array;
   /** Per node: the instance (module) that produced it, for the die view. */
   owner: Int32Array;
+  /** Per node: the index of the record in its own circuit that produced it (-1 for constants and inputs). */
+  elem: Int32Array;
   /** For each state bit, the node whose value the LATCH stores at the end of a beat. */
   latchD: Int32Array;
   /** For each state bit, the node that reads it (its LATCH). */
@@ -54,6 +58,8 @@ export function flatten(c: Circuit): FlatProgram {
   const a: number[] = [0, 0];
   const b: number[] = [0, 0];
   const owner: number[] = [0, 0];
+  const elem: number[] = [-1, -1];
+  let curElem = -1;
   const latchD = new Int32Array(c.nState).fill(-1);
   const latchNode = new Int32Array(c.nState).fill(-1);
   const instances: Instance[] = [];
@@ -62,10 +68,11 @@ export function flatten(c: Circuit): FlatProgram {
     a.push(x);
     b.push(y);
     owner.push(inst);
+    elem.push(curElem);
     return kind.length - 1;
   };
   const top = 0;
-  instances.push({ path: "top", cpu: null, id: null, parent: -1, stateStart: 0, stateEnd: c.nState });
+  instances.push({ path: "top", cpu: null, id: null, parent: -1, stateStart: 0, stateEnd: c.nState, outputs: [] });
   const inputs: number[] = [];
   for (let i = 0; i < c.nIn; i++) inputs.push(push(K_INPUT, i, 0, top));
 
@@ -77,6 +84,7 @@ export function flatten(c: Circuit): FlatProgram {
     const pendingLatches: Array<[number, number]> = [];
     let refCount = 0;
     circ.elements.forEach((e, idx) => {
+      curElem = idx;
       const base = stateOffset + circ.stateBase[idx]!;
       if (e.op === OP_NAND) {
         local[e.out] = push(K_NAND, local[e.a]!, local[e.b]!, inst);
@@ -95,6 +103,7 @@ export function flatten(c: Circuit): FlatProgram {
           parent: inst,
           stateStart: base,
           stateEnd: base + sub.nState,
+          outputs: [],
         });
         const outs = inline(
           sub,
@@ -103,6 +112,7 @@ export function flatten(c: Circuit): FlatProgram {
           child,
         );
         for (let k = 0; k < outs.length; k++) local[e.out + k] = outs[k]!;
+        instances[child]!.outputs = outs;
       }
     });
     for (const [bit, d] of pendingLatches) latchD[bit] = local[d]!;
@@ -112,6 +122,7 @@ export function flatten(c: Circuit): FlatProgram {
   };
 
   const outputs = inline(c, inputs, 0, top);
+  instances[0]!.outputs = outputs;
   return {
     nIn: c.nIn,
     nOut: c.nOut,
@@ -120,6 +131,7 @@ export function flatten(c: Circuit): FlatProgram {
     a: Int32Array.from(a),
     b: Int32Array.from(b),
     owner: Int32Array.from(owner),
+    elem: Int32Array.from(elem),
     latchD,
     latchNode,
     outputs: Int32Array.from(outputs),
@@ -228,15 +240,17 @@ export function simplify(p: FlatProgram): FlatProgram {
     a: new Int32Array(m),
     b: new Int32Array(m),
     owner: new Int32Array(m),
+    elem: new Int32Array(m),
     latchD: Int32Array.from(latchD, (d) => newId[d]!),
     latchNode: Int32Array.from(p.latchNode, (l) => newId[l]!),
     outputs: Int32Array.from(outputs, (o) => newId[o]!),
-    instances: p.instances,
+    instances: p.instances.map((inst) => ({ ...inst, outputs: inst.outputs.map((o) => newId[rep[o]!]!) })),
   };
   keep.forEach((old, j) => {
     const k = kind[old]!;
     out.kind[j] = k;
     out.owner[j] = p.owner[old]!;
+    out.elem[j] = p.elem[old]!;
     if (k === K_NAND) {
       out.a[j] = newId[a[old]!]!;
       out.b[j] = newId[b[old]!]!;

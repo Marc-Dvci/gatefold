@@ -1,0 +1,43 @@
+{
+  "title": "Ode to Joy",
+  "artist": "Ludwig van Beethoven",
+  "credit": "Symphony No. 9 (1824), public domain. Arranged for Gatefold.",
+  "bpm": 132,
+  "rowsPerBeat": 4,
+  "channels": [
+    {
+      "name": "lead",
+      "instrument": "pulse",
+      "tone": 1,
+      "decay": 1,
+      "release": 0.85,
+      "mml": "o5 l4 v13 e e f g | g f e d | c c d e | e4. d8 d2 | e e f g | g f e d | c c d e | d4. c8 c2 | d d e c | d e8 f8 e c | d e8 f8 e d | c d <g2> | e e f g | g f e d | c c d e | d4. c8 c2"
+    },
+    {
+      "name": "bass",
+      "instrument": "triangle",
+      "release": 0.6,
+      "mml": "l8 o2 v15 [c>c<]4 [g>g<]4 [c>c<]4 [g>g<]4 | [c>c<]4 [g>g<]4 [c>c<]4 [c>c<]4 | [g>g<]4 [c>c<]4 [g>g<]4 [g>g<]4 | [c>c<]4 [g>g<]4 [c>c<]4 [c>c<]4"
+    },
+    {
+      "name": "drums",
+      "instrument": "noise",
+      "layer": 1,
+      "mml": "l8 [@d3 v6 r n96 @d2 v11 n84 @d3 v6 n96 r n96 @d2 v11 n84 @d3 v6 n96]16"
+    },
+    {
+      "name": "kick",
+      "instrument": "kick",
+      "decay": 2,
+      "layer": 1,
+      "mml": "o3 l4 v15 [g r g r]16"
+    },
+    {
+      "name": "chords",
+      "instrument": "arp",
+      "tone": 0,
+      "layer": 2,
+      "mml": "o4 l1 v6 c g c g | c g c c | g c g g | c g c c"
+    }
+  ]
+}

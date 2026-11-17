@@ -67,7 +67,7 @@ describe("gate builder", () => {
     const built = n.build([nx]);
     expect(built.latch).toBe(1);
     const c = load(built.bytes, built.nIn, built.nOut);
-    let st = new Uint8Array(1);
+    let st: Uint8Array = new Uint8Array(1);
     const seen: number[] = [];
     for (let t = 0; t < 4; t++) {
       const r = beat(c, st, new Uint8Array([1]));

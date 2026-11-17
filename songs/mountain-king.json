@@ -1,0 +1,51 @@
+{
+  "title": "In the Hall of the Mountain King",
+  "artist": "Edvard Grieg",
+  "credit": "Peer Gynt (1875), public domain. Arranged for Gatefold as an adaptive boss theme.",
+  "bpm": 116,
+  "driveBpm": 168,
+  "rowsPerBeat": 4,
+  "channels": [
+    {
+      "name": "bass",
+      "instrument": "triangle",
+      "release": 0.45,
+      "mml": "o2 l4 v15 [b>f+<b>f+< | >c+c+cc< | b>f+<b>f+< | f+>c+<f+>c+<]4"
+    },
+    {
+      "name": "hats",
+      "instrument": "noise",
+      "decay": 3,
+      "mml": "l8 v5 [r n96]64"
+    },
+    {
+      "name": "lead",
+      "instrument": "pulse",
+      "tone": 1,
+      "decay": 1,
+      "release": 0.55,
+      "layer": 1,
+      "mml": "l8 v12 o3 [b>c+def+df+4 | fc+f4ec e4 | <b>c+def+df+b | af+df+a2<]2 o4 [b>c+def+df+4 | fc+f4ec e4 | <b>c+def+df+b | af+df+a2<]2"
+    },
+    {
+      "name": "kick",
+      "instrument": "kick",
+      "decay": 2,
+      "layer": 2,
+      "mml": "o3 l4 v15 [g g g g]16"
+    },
+    {
+      "name": "snare",
+      "instrument": "noise",
+      "decay": 2,
+      "layer": 2,
+      "mml": "l4 v11 [r n84 r n84]16"
+    },
+    {
+      "name": "chords",
+      "instrument": "arp",
+      "layer": 3,
+      "mml": "o4 v7 [@3 <b1> | @2 c+2 c2 | @3 <b1> | @2 f+1]4"
+    }
+  ]
+}

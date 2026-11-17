@@ -1,0 +1,41 @@
+{
+  "title": "Gatefold",
+  "artist": "Gatefold",
+  "credit": "Original theme, written for Gatefold.",
+  "bpm": 140,
+  "rowsPerBeat": 4,
+  "loopRow": 0,
+  "channels": [
+    {
+      "name": "lead",
+      "instrument": "pulse",
+      "tone": 1,
+      "decay": 1,
+      "release": 0.85,
+      "mml": "v12 o4 a4 o5 c8 o4 b8 a8 e8 a8 o5 c8 | o5 c4 o4 a8 f8 a4 o5 c8 d8 | o5 e4 d8 c8 o4 g4 o5 c8 e8 | o5 d2 o4 b4 g4 | o4 a4 o5 c8 o4 b8 a8 e8 a8 o5 c8 | o5 f4 e8 d8 c4 o4 a4 | o4 b4 o5 d8 c8 o4 b4 g4 | o4 g+2 e2 | o4 a4 o5 c8 o4 b8 a8 e8 a8 o5 c8 | o5 c4 o4 a8 f8 a4 o5 c8 d8 | o5 e4 d8 c8 o4 g4 o5 c8 e8 | o5 d2 o4 b4 g4 | o4 a4 o5 c8 o4 b8 a8 e8 a8 o5 c8 | o5 f4 e8 d8 c4 o4 a4 | o4 b4 o5 d4 c4 o4 b4 | o4 g+4 b4 o5 e4 o4 g+4"
+    },
+    {
+      "name": "bass",
+      "instrument": "triangle",
+      "release": 0.6,
+      "mml": "l8 v15 [o2 [a>a<]4 [f>f<]4 o3 [c>c<]4 o2 [g>g<]4 [a>a<]4 [f>f<]4 [g>g<]4 [e>e<]4]2"
+    },
+    {
+      "name": "chords",
+      "instrument": "arp",
+      "layer": 1,
+      "mml": "o4 l1 v6 [@3 a @2 f @2 >c< @2 g @3 a @2 f @2 g @2 e]2"
+    },
+    {
+      "name": "kick",
+      "instrument": "kick",
+      "decay": 2,
+      "mml": "o3 v15 [g4 r4 g8 g8 r4]16"
+    },
+    {
+      "name": "drums",
+      "instrument": "noise",
+      "mml": "l8 [@d3 v6 n96 n96 @d2 v12 n84 @d3 v6 n96 n96 n96 @d2 v12 n84 @d3 v6 n96]16"
+    }
+  ]
+}

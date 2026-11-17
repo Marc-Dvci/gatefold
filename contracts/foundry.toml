@@ -1,0 +1,14 @@
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.28"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 2000
+fuzz = { runs = 1024, seed = "0x6a7e" }
+invariant = { runs = 128, depth = 64 }
+
+[fmt]
+line_length = 120

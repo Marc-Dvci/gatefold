@@ -10,6 +10,8 @@
  * | `o4` `<` `>`   | set the octave, one octave down, one octave up                           |
  * | `l8`           | default length: 1 whole, 2 half, 4 quarter, 8 eighth, 16, 32; 3, 6, 12 triplets |
  * | `v12`          | volume 0-15 for the next notes                                           |
+ * | `@2`           | tone 0-3 for the next notes (pulse duty, arp chord...)                   |
+ * | `@d3`          | decay 0-3 for the next notes (none, slow, medium, fast)                  |
  * | `&`            | tie: the next note continues this one without a new attack               |
  * | `[ ... ]3`     | repeat the bracketed part 3 times (2 if no count)                        |
  * | `\|` and spaces| ignored, for readability; `;` starts a comment to the end of the line    |
@@ -24,6 +26,10 @@ export interface NoteEvent {
   midi: number;
   /** Volume 0-15. */
   vol: number;
+  /** Tone 0-3, or -1 for the channel's own. */
+  tone: number;
+  /** Decay 0-3, or -1 for the channel's own. */
+  decay: number;
 }
 
 export interface ParsedPart {
@@ -93,6 +99,8 @@ export function parseMml(src: string, rowsPerQuarter: number): ParsedPart {
   let octave = 4;
   let defaultRows = rowsPerQuarter; // l4
   let vol = 12;
+  let tone = -1;
+  let decay = -1;
   let row = 0;
   const notes: NoteEvent[] = [];
   let tie = false;
@@ -128,7 +136,7 @@ export function parseMml(src: string, rowsPerQuarter: number): ParsedPart {
     if (tie && last && last.row + last.rows === row && last.midi === midi) {
       last.rows += rows;
     } else {
-      notes.push({ row, rows, midi, vol });
+      notes.push({ row, rows, midi, vol, tone, decay });
     }
     row += rows;
   };
@@ -183,6 +191,13 @@ export function parseMml(src: string, rowsPerQuarter: number): ParsedPart {
       }
       if (!Number.isInteger(rows)) throw new MmlError("this length does not fit the row grid", at);
       defaultRows = rows;
+    } else if (ch === "@") {
+      const isDecay = peek() === "d";
+      if (isDecay) i++;
+      const v = number();
+      if (v === null || v < 0 || v > 3) throw new MmlError(isDecay ? "decay must be 0 to 3" : "tone must be 0 to 3", at);
+      if (isDecay) decay = v;
+      else tone = v;
     } else if (ch === "v") {
       const v = number();
       if (v === null || v < 0 || v > 15) throw new MmlError("volume must be 0 to 15", at);
