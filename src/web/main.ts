@@ -26,7 +26,12 @@ document.body.append(
   h(
     "header",
     { class: "top" },
-    h("a", { class: "brand", href: "#/listen", "aria-label": "Gatefold home" }, h("span", { class: "mark", "aria-hidden": "true" }), "Gatefold"),
+    h(
+      "a",
+      { class: "brand", href: "#/listen", "aria-label": "Gatefold home" },
+      h("span", { class: "mark", "aria-hidden": "true" }),
+      "Gatefold",
+    ),
     nav,
     nowPlaying,
   ),

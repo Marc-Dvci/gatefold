@@ -12,18 +12,101 @@ const lib = localLibrary();
 
 describe("MML", () => {
   it.each([
-    ["c d e", 4, [[0, 4, 60], [4, 4, 62], [8, 4, 64]]],
+    [
+      "c d e",
+      4,
+      [
+        [0, 4, 60],
+        [4, 4, 62],
+        [8, 4, 64],
+      ],
+    ],
     ["o5 l8 a", 4, [[0, 2, 81]]],
-    ["c+4 d-4 e#4", 4, [[0, 4, 61], [4, 4, 61], [8, 4, 65]]],
-    ["c4. d8", 4, [[0, 6, 60], [6, 2, 62]]],
-    ["c4&c4 c4", 4, [[0, 8, 60], [8, 4, 60]]],
+    [
+      "c+4 d-4 e#4",
+      4,
+      [
+        [0, 4, 61],
+        [4, 4, 61],
+        [8, 4, 65],
+      ],
+    ],
+    [
+      "c4. d8",
+      4,
+      [
+        [0, 6, 60],
+        [6, 2, 62],
+      ],
+    ],
+    [
+      "c4&c4 c4",
+      4,
+      [
+        [0, 8, 60],
+        [8, 4, 60],
+      ],
+    ],
     ["r4 c", 4, [[4, 4, 60]]],
-    ["o4 b > c < b", 4, [[0, 4, 71], [4, 4, 72], [8, 4, 71]]],
-    ["[c d]3", 4, [[0, 4, 60], [4, 4, 62], [8, 4, 60], [12, 4, 62], [16, 4, 60], [20, 4, 62]]],
-    ["[[c]2 d]2", 4, [[0, 4, 60], [4, 4, 60], [8, 4, 62], [12, 4, 60], [16, 4, 60], [20, 4, 62]]],
-    ["n36,8 n60", 4, [[0, 2, 36], [2, 4, 60]]],
-    ["c12 c12 c12", 6, [[0, 2, 60], [2, 2, 60], [4, 2, 60]]],
-    ["c | d ; a comment c d e\n e", 4, [[0, 4, 60], [4, 4, 62], [8, 4, 64]]],
+    [
+      "o4 b > c < b",
+      4,
+      [
+        [0, 4, 71],
+        [4, 4, 72],
+        [8, 4, 71],
+      ],
+    ],
+    [
+      "[c d]3",
+      4,
+      [
+        [0, 4, 60],
+        [4, 4, 62],
+        [8, 4, 60],
+        [12, 4, 62],
+        [16, 4, 60],
+        [20, 4, 62],
+      ],
+    ],
+    [
+      "[[c]2 d]2",
+      4,
+      [
+        [0, 4, 60],
+        [4, 4, 60],
+        [8, 4, 62],
+        [12, 4, 60],
+        [16, 4, 60],
+        [20, 4, 62],
+      ],
+    ],
+    [
+      "n36,8 n60",
+      4,
+      [
+        [0, 2, 36],
+        [2, 4, 60],
+      ],
+    ],
+    [
+      "c12 c12 c12",
+      6,
+      [
+        [0, 2, 60],
+        [2, 2, 60],
+        [4, 2, 60],
+      ],
+    ],
+    [
+      "c | d ; a comment c d e\n e",
+      4,
+      [
+        [0, 4, 60],
+        [4, 4, 62],
+        [8, 4, 64],
+      ],
+    ],
   ] as const)("%s", (src, rpq, expected) => {
     const part = parseMml(src, rpq);
     expect(part.notes.map((n) => [n.row, n.rows, n.midi])).toEqual(expected);
@@ -31,7 +114,10 @@ describe("MML", () => {
 
   it("carries volume, tone and decay on each note", () => {
     const p = parseMml("v9 @2 @d3 c v15 @1 d", 4);
-    expect(p.notes.map((n) => [n.vol, n.tone, n.decay])).toEqual([[9, 2, 3], [15, 1, 3]]);
+    expect(p.notes.map((n) => [n.vol, n.tone, n.decay])).toEqual([
+      [9, 2, 3],
+      [15, 1, 3],
+    ]);
     expect(parseMml("c", 4).notes[0]).toMatchObject({ vol: 12, tone: -1, decay: -1 });
   });
 
@@ -175,9 +261,12 @@ describe("instruments", () => {
   });
 
   it("instrument netlists are deterministic: these are the bytes a tape-out stores", () => {
-    const hashes = Object.fromEntries(INSTRUMENT_KEYS.map((k) => [k, createHash("sha256").update(lib.get(k).build.bytes).digest("hex").slice(0, 16)]));
+    const hashes = Object.fromEntries(
+      INSTRUMENT_KEYS.map((k) => [k, createHash("sha256").update(lib.get(k).build.bytes).digest("hex").slice(0, 16)]),
+    );
     const again = localLibrary();
-    for (const k of INSTRUMENT_KEYS) expect(createHash("sha256").update(again.get(k).build.bytes).digest("hex").slice(0, 16)).toBe(hashes[k]);
+    for (const k of INSTRUMENT_KEYS)
+      expect(createHash("sha256").update(again.get(k).build.bytes).digest("hex").slice(0, 16)).toBe(hashes[k]);
     expect(Object.keys(INSTRUMENTS)).toEqual(["pulse", "triangle", "noise", "kick", "arp"]);
   });
 });
@@ -192,7 +281,9 @@ describe("songs", () => {
     expect(cs.build.refs).toBe(song.channels.length);
     expect(cs.circuit.nIn).toBe(3);
     expect(cs.build.elements.at(-1)!.out).toBe(cs.circuit.nSignals - 1);
-    expect(cs.circuit.nGates).toBe(cs.build.nand + cs.build.latch + song.channels.reduce((a, c) => a + lib.get(c.instrument).circuit.nGates, 0));
+    expect(cs.circuit.nGates).toBe(
+      cs.build.nand + cs.build.latch + song.channels.reduce((a, c) => a + lib.get(c.instrument).circuit.nGates, 0),
+    );
   });
 
   it.each(demo)("%s: the netlist is at least 300 times smaller than the same audio as a CD-quality WAV", (_f, song) => {
@@ -324,7 +415,10 @@ describe("rendering", () => {
   it("maps silence to zero and stays inside 16 bits", () => {
     const silent = toPcm16(new Int32Array(2_000).fill(0), 5);
     expect(Math.max(...Array.from(silent, Math.abs))).toBe(0);
-    const loud = toPcm16(Int32Array.from({ length: 2_000 }, (_, i) => (i % 2 ? 75 : 0)), 5);
+    const loud = toPcm16(
+      Int32Array.from({ length: 2_000 }, (_, i) => (i % 2 ? 75 : 0)),
+      5,
+    );
     for (const x of loud) expect(Math.abs(x)).toBeLessThanOrEqual(32767);
   });
 

@@ -12,3 +12,6 @@ invariant = { runs = 128, depth = 64 }
 
 [fmt]
 line_length = 120
+
+[lint]
+lint_on_build = false

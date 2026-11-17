@@ -113,6 +113,14 @@ contract GatefoldRecordsTest is Test {
         rec.release(address(fake), 1, 1, 0, "");
     }
 
+    function test_an_id_beyond_u64_is_refused() public {
+        uint256 big = uint256(type(uint64).max) + 1;
+        cpu.set(big, maker, hex"00000002000003", 2);
+        vm.prank(maker);
+        vm.expectRevert(GatefoldRecords.IdTooLarge.selector);
+        rec.release(address(cpu), big, 1, 0, "");
+    }
+
     function test_a_release_happens_once() public {
         releaseInstruments(0, 0);
         vm.prank(maker);

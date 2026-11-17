@@ -3,7 +3,7 @@
  * through the gates of the chosen circuit, beat by beat.
  */
 import { flatten, simplify } from "../../core/flat";
-import { BEAT_RATE, INSTRUMENTS, INSTRUMENT_KEYS } from "../../core/instruments";
+import { INSTRUMENTS, INSTRUMENT_KEYS } from "../../core/instruments";
 import { noiseInc, noteInc } from "../../core/song";
 import { player } from "../audio";
 import { library } from "../catalog";
@@ -44,7 +44,12 @@ export function instrumentsView(root: HTMLElement): () => void {
     current = k;
     const e = lib.get(k);
     const p = programFor(k);
-    die.setProgram(p, (_i, elem) => e.build.regions[elem] ?? "logic", () => e.target.name ?? k, new Uint8Array(25));
+    die.setProgram(
+      p,
+      (_i, elem) => e.build.regions[elem] ?? "logic",
+      () => e.target.name ?? k,
+      new Uint8Array(25),
+    );
     for (const b of list.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.key === k));
     const inst = INSTRUMENTS[k]!;
     details.replaceChildren(
@@ -62,13 +67,21 @@ export function instrumentsView(root: HTMLElement): () => void {
         "label",
         { class: "field" },
         h("span", null, "Tone"),
-        h("select", { onchange: (ev: Event) => (tone = Number((ev.target as HTMLSelectElement).value)) }, ...inst.tones.map((t, i) => h("option", { value: String(i), selected: i === tone }, t))),
+        h(
+          "select",
+          { onchange: (ev: Event) => (tone = Number((ev.target as HTMLSelectElement).value)) },
+          ...inst.tones.map((t, i) => h("option", { value: String(i), selected: i === tone }, t)),
+        ),
       ),
       h(
         "label",
         { class: "field" },
         h("span", null, "Decay"),
-        h("select", { onchange: (ev: Event) => (decay = Number((ev.target as HTMLSelectElement).value)) }, ...["none", "slow", "medium", "fast"].map((t, i) => h("option", { value: String(i), selected: i === decay }, t))),
+        h(
+          "select",
+          { onchange: (ev: Event) => (decay = Number((ev.target as HTMLSelectElement).value)) },
+          ...["none", "slow", "medium", "fast"].map((t, i) => h("option", { value: String(i), selected: i === decay }, t)),
+        ),
       ),
     );
     await player.load(key(), p, "voice", 15, new Uint8Array(0));
@@ -77,7 +90,13 @@ export function instrumentsView(root: HTMLElement): () => void {
   const list = h(
     "div",
     { class: "inst-list", role: "group", "aria-label": "Instruments" },
-    ...INSTRUMENT_KEYS.map((k) => h("button", { type: "button", class: "seg", "data-key": k, "aria-pressed": "false", onclick: () => void select(k) }, INSTRUMENTS[k]!.name)),
+    ...INSTRUMENT_KEYS.map((k) =>
+      h(
+        "button",
+        { type: "button", class: "seg", "data-key": k, "aria-pressed": "false", onclick: () => void select(k) },
+        INSTRUMENTS[k]!.name,
+      ),
+    ),
   );
 
   let held = -1;
@@ -100,7 +119,16 @@ export function instrumentsView(root: HTMLElement): () => void {
   }
   for (let i = 0; i < 13; i++) {
     const black = [1, 3, 6, 8, 10].includes(i % 12);
-    const b = h("button", { type: "button", class: black ? "key black" : "key", "data-i": String(i), "aria-label": `${NAMES[i]} (key ${KEYS[i]!.toUpperCase()})` }, KEYS[i]!.toUpperCase());
+    const b = h(
+      "button",
+      {
+        type: "button",
+        class: black ? "key black" : "key",
+        "data-i": String(i),
+        "aria-label": `${NAMES[i]} (key ${KEYS[i]!.toUpperCase()})`,
+      },
+      KEYS[i]!.toUpperCase(),
+    );
     b.addEventListener("pointerdown", () => void noteOn(i));
     b.addEventListener("pointerup", () => noteOff(i));
     b.addEventListener("pointerleave", () => noteOff(i));
@@ -148,7 +176,6 @@ export function instrumentsView(root: HTMLElement): () => void {
     window.removeEventListener("keydown", onKey);
     window.removeEventListener("keyup", onKey);
     noteOff();
-    void BEAT_RATE;
   };
 }
 

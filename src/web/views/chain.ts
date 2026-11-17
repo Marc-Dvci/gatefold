@@ -23,7 +23,11 @@ function randomBits(n: number): Uint8Array {
 }
 
 /** Compare k random beats of a loaded circuit with the chain (step, or eval for a circuit without state). */
-export async function checkAgainstChain(rpc: JsonRpc, c: ChainCircuit, k: number): Promise<{ checked: number; matched: number; ms: number }> {
+export async function checkAgainstChain(
+  rpc: JsonRpc,
+  c: ChainCircuit,
+  k: number,
+): Promise<{ checked: number; matched: number; ms: number }> {
   const p = new Processor(rpc, c.cpu);
   let matched = 0;
   const t0 = performance.now();
@@ -53,7 +57,13 @@ export function chainView(root: HTMLElement): () => void {
   const die = new DieView(canvas);
   const scope = h("canvas", { class: "scope", "aria-hidden": "true" });
   const info = h("div", { class: "circuit-info" });
-  const cpuIn = h("input", { type: "text", value: "0xCE56B1f17B7C270A0D5e0E8a097Ae5ab71D85BD5", spellcheck: false, "aria-label": "Processor address", class: "mono" });
+  const cpuIn = h("input", {
+    type: "text",
+    value: "0xCE56B1f17B7C270A0D5e0E8a097Ae5ab71D85BD5",
+    spellcheck: false,
+    "aria-label": "Processor address",
+    class: "mono",
+  });
   const idIn = h("input", { type: "number", value: "1", min: "1", "aria-label": "Circuit id" });
   let loaded: ChainCircuit | null = null;
   let disposed = false;
@@ -79,7 +89,9 @@ export function chainView(root: HTMLElement): () => void {
     const count = Number(decodeResult(await rpc.call(XLAYER.factory, SEL.cpuCount), ["uint"])[0]);
     for (let tries = 0; circuits < 6 && tries < 30 && !disposed; tries++) {
       try {
-        const cpu = decodeResult(await rpc.call(XLAYER.factory, encodeCall(SEL.cpuAt, [{ type: "uint", value: rand(count) }])), ["address"])[0] as string;
+        const cpu = decodeResult(await rpc.call(XLAYER.factory, encodeCall(SEL.cpuAt, [{ type: "uint", value: rand(count) }])), [
+          "address",
+        ])[0] as string;
         const next = await new Processor(rpc, cpu).nextId();
         if (next <= 1n) continue;
         const id = BigInt(1 + rand(Number(next - 1n)));
@@ -114,7 +126,12 @@ export function chainView(root: HTMLElement): () => void {
       const c = await loadFromChain(rpc, cpuIn.value.trim(), BigInt(idIn.value), "latest", known);
       loaded = c;
       const p = simplify(flatten(c.circuit));
-      die.setProgram(p, (i) => (i === 0 ? "logic" : "referenced"), (i) => (i === 0 ? `circuit #${c.id}` : `REF #${p.instances[i]!.id}`), new Uint8Array(c.circuit.nIn));
+      die.setProgram(
+        p,
+        (i) => (i === 0 ? "logic" : "referenced"),
+        (i) => (i === 0 ? `circuit #${c.id}` : `REF #${p.instances[i]!.id}`),
+        new Uint8Array(c.circuit.nIn),
+      );
       const owner = await new Processor(rpc, c.cpu).ownerOf(c.id).catch(() => "");
       const out = h("p", { class: "verify-out", role: "status" });
       info.replaceChildren(
@@ -191,7 +208,16 @@ export function chainView(root: HTMLElement): () => void {
         h("h2", null, "Random circuits, checked against the chain"),
         h("button", { type: "button", class: "primary", onclick: () => void sample() }, "Check 6 random circuits"),
         sampleOut,
-        h("table", { class: "sample" }, h("thead", null, h("tr", null, ...["Processor", "Circuit", "Gates", "State", "Call", "Same"].map((t) => h("th", { scope: "col" }, t)))), rows),
+        h(
+          "table",
+          { class: "sample" },
+          h(
+            "thead",
+            null,
+            h("tr", null, ...["Processor", "Circuit", "Gates", "State", "Call", "Same"].map((t) => h("th", { scope: "col" }, t))),
+          ),
+          rows,
+        ),
       ),
       h(
         "section",

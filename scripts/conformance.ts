@@ -46,7 +46,17 @@ export async function runConformance(rpc = new JsonRpc(), log = (s: string) => c
   const rand = rng(196);
   const bits = (n: number): Uint8Array => Uint8Array.from({ length: n }, () => (rand() < 0.5 ? 1 : 0));
   const t0 = Date.now();
-  const res: ConformanceResult = { block: BigInt(block).toString(), circuits: 0, stateful: 0, processors: 0, beats: 0, referenceMatches: 0, engineMatches: 0, failures: [], ms: 0 };
+  const res: ConformanceResult = {
+    block: BigInt(block).toString(),
+    circuits: 0,
+    stateful: 0,
+    processors: 0,
+    beats: 0,
+    referenceMatches: 0,
+    engineMatches: 0,
+    failures: [],
+    ms: 0,
+  };
   const cpus = new Set<string>();
   for (const s of fixture.sample) {
     try {
@@ -71,7 +81,8 @@ export async function runConformance(rpc = new JsonRpc(), log = (s: string) => c
           chainState = r.newState;
         }
         res.beats++;
-        const sameRef = bytesToHex(chainOut) === bytesToHex(local.outputs) && (!chainState || bytesToHex(chainState) === bytesToHex(local.newState));
+        const sameRef =
+          bytesToHex(chainOut) === bytesToHex(local.outputs) && (!chainState || bytesToHex(chainState) === bytesToHex(local.newState));
         if (sameRef) res.referenceMatches++;
         else res.failures.push({ cpu: s.cpu, id: s.id, reason: "reference evaluator differs from the chain" });
         // The compiled engines, from the same state, must give the same word and the same next state.
@@ -99,7 +110,18 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const r = await runConformance();
   writeFileSync(
     join(ROOT, "docs/evidence/xlayer-conformance.json"),
-    JSON.stringify({ what: "Gatefold's evaluators against X Layer step()/eval(), read-only, at one pinned block", date: new Date().toISOString().slice(0, 10), ...r }, null, 2) + "\n",
+    JSON.stringify(
+      {
+        what: "Gatefold's evaluators against X Layer step()/eval(), read-only, at one pinned block",
+        date: new Date().toISOString().slice(0, 10),
+        ...r,
+      },
+      null,
+      2,
+    ) + "\n",
   );
-  console.log(`${r.circuits} circuits (${r.stateful} with state) on ${r.processors} processors at block ${r.block}: reference ${r.referenceMatches}/${r.beats}, compiled ${r.engineMatches}/${r.beats}; ${r.failures.length} failures`);
+  console.log(
+    `${r.circuits} circuits (${r.stateful} with state) on ${r.processors} processors at block ${r.block}: reference ${r.referenceMatches}/${r.beats}, compiled ${r.engineMatches}/${r.beats}; ${r.failures.length} failures`,
+  );
+  process.exitCode = r.failures.length ? 1 : 0;
 }

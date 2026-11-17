@@ -17,7 +17,12 @@ function encodeBytesTail(b: Uint8Array): string {
   return word(BigInt(b.length)) + padded;
 }
 
-export type AbiValue = { type: "uint"; value: bigint | number } | { type: "address"; value: string } | { type: "bytes"; value: Uint8Array } | { type: "bytes32"; value: string } | { type: "bool"; value: boolean };
+export type AbiValue =
+  | { type: "uint"; value: bigint | number }
+  | { type: "address"; value: string }
+  | { type: "bytes"; value: Uint8Array }
+  | { type: "bytes32"; value: string }
+  | { type: "bool"; value: boolean };
 
 /** ABI-encode arguments (head and tail) after a 4-byte selector. */
 export function encodeCall(selector: string, args: AbiValue[]): string {
@@ -69,7 +74,10 @@ function readBytesAt(data: Uint8Array, offset: number): Uint8Array {
 }
 
 /** Decode return data made of the given types (uint, address, bool, bytes). */
-export function decodeResult(hex: string, types: Array<"uint" | "address" | "bool" | "bytes">): Array<bigint | string | boolean | Uint8Array> {
+export function decodeResult(
+  hex: string,
+  types: Array<"uint" | "address" | "bool" | "bytes">,
+): Array<bigint | string | boolean | Uint8Array> {
   const data = hexToBytes(hex);
   return types.map((t, i) => {
     const w = readWord(data, i * WORD);

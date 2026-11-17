@@ -50,13 +50,24 @@ for (const [key, inst] of Object.entries(INSTRUMENTS)) {
 }
 
 const summary: Array<Record<string, unknown>> = [];
-for (const f of readdirSync(join(ROOT, "songs")).filter((x) => x.endsWith(".json")).sort()) {
+for (const f of readdirSync(join(ROOT, "songs"))
+  .filter((x) => x.endsWith(".json"))
+  .sort()) {
   const slug = f.replace(/\.json$/, "");
   const song = JSON.parse(readFileSync(join(ROOT, "songs", f), "utf8")) as Song;
   const cs = compileSong(song, lib);
+  const t0 = performance.now();
   const raw = renderBeats(cs, cs.beats, FULL);
+  const renderMs = performance.now() - t0;
   const seconds = cs.beats / BEAT_RATE;
-  const refs = cs.build.elements.filter((e) => e.op === OP_REF).map((e, i) => ({ channel: song.channels[i]!.name, instrument: song.channels[i]!.instrument, cpu: e.op === OP_REF ? e.cpu : "", id: e.op === OP_REF ? e.id.toString() : "" }));
+  const refs = cs.build.elements
+    .filter((e) => e.op === OP_REF)
+    .map((e, i) => ({
+      channel: song.channels[i]!.name,
+      instrument: song.channels[i]!.instrument,
+      cpu: e.op === OP_REF ? e.cpu : "",
+      id: e.op === OP_REF ? e.id.toString() : "",
+    }));
   const stats = {
     seconds: Math.round(seconds * 10) / 10,
     rows: cs.rows,
@@ -69,6 +80,7 @@ for (const f of readdirSync(join(ROOT, "songs")).filter((x) => x.endsWith(".json
     cdWavBytes: cdWavBytes(seconds),
     smallerBy: Math.round(cdWavBytes(seconds) / cs.build.bytes.length),
   };
+  const realtime = seconds / (renderMs / 1000);
   writeFileSync(
     join(ROOT, `examples/songs/${slug}.json`),
     JSON.stringify(
@@ -91,6 +103,8 @@ for (const f of readdirSync(join(ROOT, "songs")).filter((x) => x.endsWith(".json
   );
   writeFileSync(join(ROOT, `examples/audio/${slug}.wav`), wav(toPcm16(raw, song.channels.length)));
   summary.push({ slug, title: song.title, ...stats });
-  console.log(`${slug}: ${stats.bytes} bytes, ${stats.nand} NAND + ${stats.latch} LATCH + ${stats.refs} REF, ${stats.seconds} s, ${stats.smallerBy}x smaller than a CD-quality WAV`);
+  console.log(
+    `${slug}: ${stats.bytes} bytes, ${stats.nand} NAND + ${stats.latch} LATCH + ${stats.refs} REF, ${stats.seconds} s, ${stats.smallerBy}x smaller than a CD-quality WAV; rendered ${realtime.toFixed(1)}x faster than real time`,
+  );
 }
 writeFileSync(join(ROOT, "examples/songs/summary.json"), JSON.stringify(summary, null, 2) + "\n");

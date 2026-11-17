@@ -1,22 +1,18 @@
-# Two images from one file. compose.yaml builds both; a plain `docker build .` gives the demo.
-#   app   the API and the web app on one port; live features with your own keys (.env)
-#   demo  the same image in demo mode: recorded or deterministic answers, no keys
+# The Gatefold site, built and served as static files. No keys: it reads X Layer through the public node.
+#   docker compose up        http://localhost:8080
 
-FROM python:3.12-slim-bookworm AS app
-ENV PYTHONUNBUFFERED=1 \
-    APP_WEB_DIR=/app/web
+FROM node:22-slim AS build
 WORKDIR /app
-# System libraries that some wheels link go here (rasterio, for one, needs libexpat1), installed with apt-get.
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY app/ app/
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+COPY tsconfig.json vite.config.ts vite.embed.config.ts ./
+COPY src/ src/
 COPY web/ web/
-RUN useradd --create-home appuser
-USER appuser
-EXPOSE 8787
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s \
-    CMD python -c "import urllib.request as u; u.urlopen('http://127.0.0.1:8787/api/health', timeout=4)"
-CMD ["python", "-m", "uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8787"]
+COPY songs/ songs/
+COPY deployments/ deployments/
+RUN npx vite build && npx vite build --config vite.embed.config.ts
 
-FROM app AS demo
-ENV APP_DEMO=1
+FROM nginxinc/nginx-unprivileged:1.27-alpine AS demo
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s CMD wget -q -O /dev/null http://127.0.0.1:8080/ || exit 1

@@ -1,12 +1,12 @@
 {
   "what": "Gatefold deployment rehearsed on a local anvil fork of X Layer mainnet: real factory, processor, transistor and USD₮0 contracts at the fork block.",
-  "forkBlock": 76108106,
+  "forkBlock": 76109659,
   "date": "2026-11-17",
   "deployment": {
     "chainId": 196,
     "processor": "0x1900801e311184063b9d9C119C9D98AA4950E12c",
     "transistors": "0x523161955D1963891640A111688678Fe6a9523ea",
-    "records": "0xfbb6984752e71ae3a887a4185402bbaf46802573",
+    "records": "0xd2d50e234c6826010f6029b373b5551803a1c49c",
     "instruments": {
       "pulse": "1",
       "triangle": "2",
@@ -19,13 +19,13 @@
       "mountain-king": "7",
       "ode-to-joy": "8"
     },
-    "block": 76108129,
+    "block": 76109682,
     "site": {
       "name": "6.2.425.tape",
       "gateway": "https://6-2-425.tapekit.org/",
       "container": "0x909D3fb5D15B193FbCde49A382804b5aBa91E8b5",
-      "files": 10,
-      "bytes": 177564,
+      "files": 12,
+      "bytes": 210384,
       "live": true
     }
   },
@@ -82,248 +82,260 @@
     "name": "6.2.425.tape",
     "gateway": "https://6-2-425.tapekit.org/",
     "container": "0x909D3fb5D15B193FbCde49A382804b5aBa91E8b5",
-    "files": 10,
-    "bytes": 177564,
+    "files": 12,
+    "bytes": 210384,
     "live": true
   },
   "transactions": [
     {
       "what": "approve BEM for createCPU",
-      "tx": "0x405a8b281799e60a86ded4b7a2ce57b445158709d3d87ba0ff0218e61bd7740a",
+      "tx": "0x0d59e5e070ab9e61c2cf507c50e67079c0a354c9701426a2b04d24212684cfb6",
       "gas": "46393",
-      "ms": 642
+      "ms": 442
     },
     {
       "what": "createCPU Gatefold",
-      "tx": "0x8885266233a7dc56f4994f016f77ed260b4076e1b538fdc288f09ebdd236919b",
+      "tx": "0x41aba9bb51ee184c85a089af9c63884b8ba8bcb60cb8137837862bac450f5864",
       "gas": "773887",
-      "ms": 249
+      "ms": 235
     },
     {
       "what": "approve BEM for transistors",
-      "tx": "0x5895c1d57b2f760111965f4959abbb51112b5298e60500fb057e2d146bf81bc7",
+      "tx": "0xcf1aa0c5ecd4f011dc7a525d10907bf37a9e71d2b2f5e85a178105fd7dad7a9b",
       "gas": "46393",
-      "ms": 229
+      "ms": 214
     },
     {
       "what": "mint 4788 NAND",
-      "tx": "0xea832c11dc4fdfa454846e88eedad663121452c9e380e046bf547bda4f278323",
+      "tx": "0x41997054eb829f65c68e551e9c6d8225b43c9d4e8bf3502d7666a3b67999790d",
       "gas": "196111",
-      "ms": 220
+      "ms": 228
     },
     {
       "what": "mint 237 LATCH",
-      "tx": "0xfc09ba51aba9e420a4398d056a47b7ef773d29662f87d89ee962562eecde0e21",
+      "tx": "0xd5ddd6bf714d7f57d939ff4b5d70f2d23a9f116f772d8899af89cff78f8f790e",
       "gas": "103034",
-      "ms": 5
+      "ms": 4
     },
     {
       "what": "tapeout instrument pulse (1829 bytes)",
-      "tx": "0x10beea52f822099aeaa4fd672b01f6787cc39657d49c1b63173775145840944d",
+      "tx": "0x8a98fb565d6c59bc221a2ac3748debb76329d6e435a1bc53c8c3bb723ba6838c",
       "gas": "997458",
-      "ms": 1056
+      "ms": 1030
     },
     {
       "what": "tapeout instrument triangle (3096 bytes)",
-      "tx": "0xf505b08157ee27e6f835808edaef6fe7145b7457a683c4999221dc5d6b6fc2f1",
+      "tx": "0xfd44b85455123d2085897401eb77cf8538283b4fdecf9be9ebd05674850bbf86",
       "gas": "1479607",
-      "ms": 836
+      "ms": 869
     },
     {
       "what": "tapeout instrument noise (1999 bytes)",
-      "tx": "0x2dc418ef97d745db6db72032fcdd3e878697485905d24624ce2c00875e7445c9",
+      "tx": "0xaa19915a048ce0afffd47dd9f3b5df263984ab9e7ce3be945394e6f63ac92e2d",
       "gas": "1034149",
-      "ms": 465
+      "ms": 445
     },
     {
       "what": "tapeout instrument kick (5035 bytes)",
-      "tx": "0x4c34d2db8ff9536a806c65d5718a17973174b028046ca6132172bfd9bce30ad9",
+      "tx": "0x2639508da989b92f46177adeb5c250c36573866c4c27fa5e85b3feff4605b8f5",
       "gas": "2272356",
-      "ms": 462
+      "ms": 467
     },
     {
       "what": "tapeout instrument arp (4830 bytes)",
-      "tx": "0x651364fc9d7dc8bf93c2fe4dddcc0c63778c7351d8bd575d1933bedd4fadc155",
+      "tx": "0x96ca12b34fb750a2ece979cf9f4212d47e864d4b2a3d1a2d56378875162132ce",
       "gas": "2186019",
-      "ms": 473
+      "ms": 833
     },
     {
       "what": "tapeout song gatefold-theme (6865 bytes)",
-      "tx": "0x55ad1f97dec7e9d76d325e4c8c329af919a189aa29357f37294a7bac6f7a7fdb",
+      "tx": "0xf6375e7a207fe102423429ea84caf9975d81c3eab401ab8591b8048e435a261f",
       "gas": "3051708",
-      "ms": 486
+      "ms": 485
     },
     {
       "what": "tapeout song mountain-king (6600 bytes)",
-      "tx": "0x7e6ad3cb0ec4c8befc776e0bda67141dd19b1ee95c81bca8974d927a76ef93af",
+      "tx": "0x4ce4cfe7091a9a96db64c8725ad059b8d12e7e14eb5ef065afec035ca1822148",
       "gas": "2946490",
-      "ms": 498
+      "ms": 468
     },
     {
       "what": "tapeout song ode-to-joy (5906 bytes)",
-      "tx": "0x4e920fe59285c0fe87ec4accbca82a52a79eac5a4623384fddc9d82c7a29c532",
+      "tx": "0x1c61e5cab90d177e979fb5670ade24f14c1c498add7cbaae14d1e192e7a003c6",
       "gas": "2650733",
-      "ms": 847
+      "ms": 1321
     },
     {
       "what": "deploy GatefoldRecords",
-      "tx": "0x98f8f2afd065d141c291c7fd660cdb51cd96e510a9d464b3f5e956f68d18860a",
-      "gas": "1764026"
+      "tx": "0x62f2731600841af3741d3a00a7212e8f5d9cc49477bed4f39d98f0f995e2b3b1",
+      "gas": "1777976"
     },
     {
       "what": "release instrument pulse",
-      "tx": "0xfa0127798b2c64f07b4b3d79931ee70774daf52887a2a81a4914947c7024901e",
-      "gas": "245838",
-      "ms": 7
+      "tx": "0x703f602d48746091779c0b50ac2f3469996bd66d1d0434f2b1216b1698a2b6b1",
+      "gas": "245864",
+      "ms": 6
     },
     {
       "what": "release instrument triangle",
-      "tx": "0xffee27f62c1aad62b775b582173ce371837c2d0c71e23edf56c9de9269e9e080",
-      "gas": "333859",
-      "ms": 660
+      "tx": "0x02721be21043af1b5f0878460cb8eee11a2874033c1f559e191f0dc8ec934968",
+      "gas": "333885",
+      "ms": 606
     },
     {
       "what": "release instrument noise",
-      "tx": "0x659fc277eef50c8bd5f36bfe1e5c66051f5b8dbb76368f47472dadaf00c9bc90",
-      "gas": "260359",
+      "tx": "0x74594404d4ae969c1325fe669be69494732964abc1ce56703220d71ea9ddf989",
+      "gas": "260385",
       "ms": 6
     },
     {
       "what": "release instrument kick",
-      "tx": "0xb4935b97781db61e105de189974e134a5c5b4093bfaf8e2a7e6e5639119a594c",
-      "gas": "472361",
-      "ms": 625
+      "tx": "0x0328a03472ec8da15780d97a7ddc6e3e36e0cd53f8612f04280aa1a2984d5cb5",
+      "gas": "472387",
+      "ms": 222
     },
     {
       "what": "release instrument arp",
-      "tx": "0xb23787046af6ef7442bf366aeeaa35a596bf9a8f2ffa2126c11c90a5d3f144b6",
-      "gas": "455208",
-      "ms": 224
+      "tx": "0x8cd17df8110b3bf1d7171bd54026f7952739c79338e72d3e527c362cc1091ee2",
+      "gas": "455234",
+      "ms": 293
     },
     {
       "what": "release song gatefold-theme",
-      "tx": "0xf4ea01dd16c53063e33b43c8539d4693b11c41288488a545c932a2df2399d563",
-      "gas": "724855",
-      "ms": 230
+      "tx": "0x7f0d8d29fbf4e7da303d341e41097416329c5d090745499c32b0f4599ae90bbc",
+      "gas": "724881",
+      "ms": 646
     },
     {
       "what": "release song mountain-king",
-      "tx": "0x1a84f2e0748c75d863f8d51136c97d0ef0783429055ddedb137262428d0c6945",
-      "gas": "703006",
-      "ms": 231
+      "tx": "0x1a5d8c42f4cf50aba6a591cc6021930778fad5f061c61c815808d880038a24a3",
+      "gas": "703032",
+      "ms": 619
     },
     {
       "what": "release song ode-to-joy",
-      "tx": "0xe01f5b7e7ad75eb694f69f901efc7a053ef6fe0162897aea8f0c8cc95054a808",
-      "gas": "657923",
-      "ms": 614
+      "tx": "0x651fa53229ea633ce7667d155b97515c177ab3b497387fe27c60c4d580a670ef",
+      "gas": "657949",
+      "ms": 330
     },
     {
       "what": "licence song with a USD₮0 authorization",
-      "tx": "0x3c74debcd566b319593bb79db213c2d3f7ce91aac3e81978e8984f5730766b4a",
-      "gas": "273921",
-      "ms": 5340
+      "tx": "0x41aa0f6a85025442b0853028c4d69895cff456a7627a5e5c0fd45d12e5328b93",
+      "gas": "273901",
+      "ms": 4546
     },
     {
       "what": "withdraw credits",
-      "tx": "0x728d1781ac5c772b9c5304dac241827e404c74522bd7ba97fd40a2fc35799d5c",
+      "tx": "0x77c9255f7643207c989b14fe6cda754dfe8b7d86cb7ee6438177559c5124e7f4",
       "gas": "64275",
-      "ms": 640
+      "ms": 216
     },
     {
       "what": "open the container of circuit #6 (0.08 OKB)",
-      "tx": "0xb47b2685079e401fd0ab6a3ae37d8774f9869e7cbd0ceb8bb2b8edf6ca9e37e5",
+      "tx": "0x33148fb81ff263dab5efcfb930e2450ae8493dbdca783b11409a050c0fad1982",
       "gas": "167244",
-      "ms": 2463
+      "ms": 1865
     },
     {
-      "what": "site assets/main-CjqihL8T.css chunk 1/1",
-      "tx": "0xbb67d1d181a28ec32cf1cf8032442f36b7348d4fd8ea7f535d2cbe837d06dbc9",
-      "gas": "2613448",
-      "ms": 10771
+      "what": "site assets/main-BkZ1O-Lp.css chunk 1/1",
+      "tx": "0x6a94660f13d2a470fcc6b34cc360833092457096d04740fc5ebfd91d042f92b1",
+      "gas": "2681309",
+      "ms": 11480
     },
     {
-      "what": "site assets/main-hNb1pJQw.js chunk 1/4",
-      "tx": "0x3a11bda8cfc86008f9057f4cc50a56de88abe1f4a03ac923fc1a3f2e839d2b1f",
+      "what": "site assets/main-C8Cc9vIc.js chunk 1/4",
+      "tx": "0x46827122f13977bb7ef0bd35f3188205559682699cb00bd31837d48408e60283",
       "gas": "5492100",
-      "ms": 3123
+      "ms": 4275
     },
     {
-      "what": "site assets/main-hNb1pJQw.js chunk 2/4",
-      "tx": "0xe82533490841be7e6034c11efc691e4459dc080433f4808146e66b353ca3310b",
+      "what": "site assets/main-C8Cc9vIc.js chunk 2/4",
+      "tx": "0x3ac7b6a067db1da3f3a71e52fed023fd82666bea4551d386d4983b7b6468ce7c",
       "gas": "5366627",
-      "ms": 1467
+      "ms": 1045
     },
     {
-      "what": "site assets/main-hNb1pJQw.js chunk 3/4",
-      "tx": "0xab92fba8115aa9b39f3d3e48f7f2a9e672b0bd8a32e06a30853e3dd3780c3c83",
+      "what": "site assets/main-C8Cc9vIc.js chunk 3/4",
+      "tx": "0x3ba21d98940226789eeed5fdf3a387c3126a233899e99ae6adfd19d7797c2c11",
       "gas": "5366627",
-      "ms": 830
+      "ms": 857
     },
     {
-      "what": "site assets/main-hNb1pJQw.js chunk 4/4",
-      "tx": "0x195f4caff60fc63d004ebf1e2846cf1022b3a3d869d5670152efa23b83ce4651",
-      "gas": "1627534",
-      "ms": 1243
+      "what": "site assets/main-C8Cc9vIc.js chunk 4/4",
+      "tx": "0xde2e3075302b0a1812c9a74c1f2baf98871f1bea1f0ad0e4671ff8ca4b9e3a5d",
+      "gas": "2952890",
+      "ms": 828
     },
     {
-      "what": "site assets/worklet-DfhjATng.js chunk 1/1",
-      "tx": "0x7925cbc78dc5f25344fd77a693a54d0e420e02ec8ec481bae3018823bc48581a",
-      "gas": "1489182",
-      "ms": 3531
+      "what": "site assets/worklet-B2Mvyhtj.js chunk 1/1",
+      "tx": "0x38d201f7b222dff216bbfb86f956dd1b39ade42dd9231745e7e9eaef3749e41c",
+      "gas": "1486843",
+      "ms": 3509
     },
     {
-      "what": "site favicon.svg chunk 1/1",
-      "tx": "0x881976b37fefee9e4810f761d23622d7c4df9a90c8d209820711098748ff076b",
-      "gas": "421637",
+      "what": "site embed/assets/worklet-CXWOdWMB.js chunk 1/1",
+      "tx": "0x373a3e3321b33e67957e2ccc7e58460962e563e51e71185985bb2ed8c44ecfc8",
+      "gas": "2043332",
       "ms": 3677
     },
     {
+      "what": "site embed/gatefold.js chunk 1/1",
+      "tx": "0xf5dd77984c4cface1d90e27d2eedcbb4f34545c53f25ae481d996f9272243b5b",
+      "gas": "4273509",
+      "ms": 2892
+    },
+    {
+      "what": "site favicon.svg chunk 1/1",
+      "tx": "0xcd4fbf269fea663882f240bf5691501d6f1629f675f185bd547ea6780bb9c32f",
+      "gas": "421637",
+      "ms": 3728
+    },
+    {
       "what": "site fonts/big-shoulders-display-latin-800-normal.woff2 chunk 1/1",
-      "tx": "0xd160b7e9d18c12651e118d90937efc557e48c7d8e6ec7d8920d1c3370c19bafe",
+      "tx": "0x688df726c1aadd0ce6b9e60ddeae310963bf0e2ce56e6448fad339689e4f899e",
       "gas": "3487999",
-      "ms": 5112
+      "ms": 5434
     },
     {
       "what": "site fonts/inter-tight-latin-400-normal.woff2 chunk 1/1",
-      "tx": "0x7394264da437779cd010d67fd74ee4945ed888b3c234d8ad5728f4a9e3bd3012",
+      "tx": "0x5945e14e95684d1c7a07ab599ac9e529adaa6580ffa831983f9a5e10c2a7bc55",
       "gas": "5104474",
-      "ms": 4116
+      "ms": 4660
     },
     {
       "what": "site fonts/inter-tight-latin-600-normal.woff2 chunk 1/1",
-      "tx": "0x6f8bef7877740acd8a09f86e37837af5b9d78ef74838b2999e125a225e5337ea",
+      "tx": "0x57814c82ac1c201287ad11abf50f2fb4297b3ce925443fc0c5db7431ec53b460",
       "gas": "5244015",
-      "ms": 5179
+      "ms": 3907
     },
     {
       "what": "site fonts/jetbrains-mono-latin-400-normal.woff2 chunk 1/1",
-      "tx": "0xa4dbed7bc814dae954a277d85f6b8dda73332d6ea8fd6933bbbd9b716d18625f",
+      "tx": "0x484dddff2d1a1d93442884b0d6757d52186131d9b093976c7ce38d8eac92ecde",
       "gas": "4921097",
-      "ms": 5111
+      "ms": 4741
     },
     {
       "what": "site fonts/README.md chunk 1/1",
-      "tx": "0x2f27f6130ec8e02cd7ce4a83f070f8d98ceec2cb481e5977df1ce185fcec7d6b",
+      "tx": "0x86c47b42f68371ab8ec1df5f7e33bdeb83a47b434e34f3615214bf91e4fd2b2b",
       "gas": "380061",
-      "ms": 4680
+      "ms": 2972
     },
     {
       "what": "site index.html chunk 1/1",
-      "tx": "0x95793bd97b910c7b961a4fcb9324033c08c59525a34bc7e827f88ec76500a178",
-      "gas": "550149",
-      "ms": 3578
+      "tx": "0xd14868fab7111e001a9b26566b7a3e51508a7fd3f691b945057956a34164f3df",
+      "gas": "557081",
+      "ms": 3253
     },
     {
       "what": "activate 6.2.425.tape for 1 month (0 OKB)",
-      "tx": "0x079e34bccfcdcfaffffb8611b586c95cce8038c5a854e74c9d7e1602019acb48",
+      "tx": "0xc01b21e410728971d3363339f9b551ad86a744148e6892a7f7eb749cee00acec",
       "gas": "185482",
-      "ms": 2383
+      "ms": 2268
     }
   ],
-  "totalGas": "66157645",
+  "totalGas": "73886434",
   "xlayerGasPriceWei": "20000001",
-  "okbForGasAtThatPrice": "0.001323152966157645",
+  "okbForGasAtThatPrice": "0.001477728753886434",
   "tapeoutFeesOkb": "0.0104",
-  "seconds": 98
+  "seconds": 101
 }

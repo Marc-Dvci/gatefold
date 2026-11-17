@@ -86,7 +86,14 @@ export async function pricing(rpc: JsonRpc, processor: string, account: string):
     if (!(e instanceof RpcError)) throw e;
   }
   const bal = (id: bigint) =>
-    readUint(rpc, transistors, encodeCall(WSEL.balanceOf1155, [{ type: "address", value: account }, { type: "uint", value: id }]));
+    readUint(
+      rpc,
+      transistors,
+      encodeCall(WSEL.balanceOf1155, [
+        { type: "address", value: account },
+        { type: "uint", value: id },
+      ]),
+    );
   const [nand, latch] = await Promise.all([bal(NAND_ID), bal(LATCH_ID)]);
   return { transistors, tapeoutFee, mintPrice, protocolFee, payToken, nand, latch };
 }
@@ -105,11 +112,17 @@ export function tapeoutData(netlist: Uint8Array, nIn: number, nOut: number): str
 }
 
 export function mintData(id: bigint, amount: bigint): string {
-  return encodeCall(WSEL.mint, [{ type: "uint", value: id }, { type: "uint", value: amount }]);
+  return encodeCall(WSEL.mint, [
+    { type: "uint", value: id },
+    { type: "uint", value: amount },
+  ]);
 }
 
 export function approveData(spender: string, amount: bigint): string {
-  return encodeCall(WSEL.approve, [{ type: "address", value: spender }, { type: "uint", value: amount }]);
+  return encodeCall(WSEL.approve, [
+    { type: "address", value: spender },
+    { type: "uint", value: amount },
+  ]);
 }
 
 export async function sendTx(p: Eip1193, from: string, to: string, data: string, value = 0n): Promise<string> {
@@ -125,7 +138,12 @@ export interface Receipt {
   blockNumber: string;
 }
 
-export async function waitReceipt(rpc: JsonRpc, hash: string, timeoutMs = 180_000, sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))): Promise<Receipt> {
+export async function waitReceipt(
+  rpc: JsonRpc,
+  hash: string,
+  timeoutMs = 180_000,
+  sleep = (ms: number) => new Promise((r) => setTimeout(r, ms)),
+): Promise<Receipt> {
   const start = Date.now();
   for (;;) {
     const r = await rpc.request<Receipt | null>("eth_getTransactionReceipt", [hash]);

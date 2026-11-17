@@ -26,7 +26,7 @@ export function renderBeats(cs: CompiledSong, beats: number, pins: Uint8Array = 
  */
 export function toPcm16(raw: Int32Array, channels: number): Int16Array {
   const full = 15 * channels;
-  const gain = (1.8 * 32767) / full;
+  const gain = (1.5 * 32767) / full;
   const pcm = new Int16Array(raw.length);
   // A first-order DC blocker keeps silence at zero when only some channels play.
   let x1 = 0;

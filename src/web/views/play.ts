@@ -22,9 +22,18 @@ export function intensityFor(score: number): number {
 
 export function playView(root: HTMLElement): () => void {
   const entry = CATALOG.find((c) => c.slug === SLUG)!;
-  const canvas = h("canvas", { class: "game", width: 960, height: 540, tabindex: "0", role: "img", "aria-label": "Game field: move left and right to dodge the falling blocks" });
+  const canvas = h("canvas", {
+    class: "game",
+    width: 960,
+    height: 540,
+    tabindex: "0",
+    role: "img",
+    "aria-label": "Game field: move left and right to dodge the falling blocks",
+  });
   const hud = h("p", { class: "hud", role: "status", "aria-live": "polite" });
   const start = h("button", { type: "button", class: "primary" }, "Start");
+  const watch = h("button", { type: "button", class: "ghost" }, "Watch it play itself");
+  let autopilot = false;
   const source = h("p", { class: "muted small" });
   let song: GatefoldPlayer | null = null;
   let running = false;
@@ -63,7 +72,27 @@ export function playView(root: HTMLElement): () => void {
     t = 0;
   }
 
-  async function begin(): Promise<void> {
+  /** The attract mode's pilot: steer toward the column with the least danger close above the player. */
+  function pilot(): number {
+    let best = px;
+    let bestScore = Infinity;
+    for (let x = 20; x <= 940; x += 20) {
+      let danger = 0;
+      for (const b of blocks) {
+        if (b.y < 160 || b.y > 520) continue;
+        if (x + 34 > b.x && x - 34 < b.x + b.w) danger += (b.y / 520) ** 3;
+      }
+      const cost = danger * 100 + Math.abs(x - px) / 300;
+      if (cost < bestScore) {
+        bestScore = cost;
+        best = x;
+      }
+    }
+    return best;
+  }
+
+  async function begin(auto = false): Promise<void> {
+    autopilot = auto;
     player.pause();
     const s = await ensureSong();
     reset();
@@ -73,7 +102,7 @@ export function playView(root: HTMLElement): () => void {
     await s.play();
     running = true;
     start.textContent = "Restart";
-    canvas.focus();
+    canvas.focus({ preventScroll: true });
     last = performance.now();
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(frame);
@@ -99,7 +128,8 @@ export function playView(root: HTMLElement): () => void {
     const boss = t < bossUntil;
     const speed = 160 + score * 6 + (boss ? 160 : 0);
     const dir = (keys.has("ArrowRight") || keys.has("d") ? 1 : 0) - (keys.has("ArrowLeft") || keys.has("a") ? 1 : 0);
-    if (pointerX !== null) px += Math.max(-1, Math.min(1, (pointerX - px) / 30)) * 520 * dt;
+    const target = autopilot ? pilot() : pointerX;
+    if (target !== null) px += Math.max(-1, Math.min(1, (target - px) / 30)) * 520 * dt;
     else px += dir * 520 * dt;
     px = Math.max(20, Math.min(940, px));
     spawn -= dt;
@@ -120,7 +150,7 @@ export function playView(root: HTMLElement): () => void {
     const level = intensityFor(score);
     song?.setIntensity(level);
     song?.setDrive(t < bossUntil);
-    hud.textContent = `Score ${score} · intensity pin ${level} · drive pin ${t < bossUntil ? "on (boss)" : "off"}`;
+    hud.textContent = `${autopilot ? "Autopilot · " : ""}Score ${score} · intensity pin ${level} · drive pin ${t < bossUntil ? "on (boss)" : "off"}`;
   }
 
   function draw(): void {
@@ -167,7 +197,7 @@ export function playView(root: HTMLElement): () => void {
     if (e.type === "keydown") {
       if (e.key === " " && !running && document.activeElement === canvas) {
         e.preventDefault();
-        void begin();
+        void begin(false);
       }
       keys.add(e.key.length === 1 ? e.key.toLowerCase() : e.key);
     } else keys.delete(e.key.length === 1 ? e.key.toLowerCase() : e.key);
@@ -179,7 +209,8 @@ export function playView(root: HTMLElement): () => void {
   });
   canvas.addEventListener("pointerup", () => (pointerX = null));
   canvas.addEventListener("pointerleave", () => (pointerX = null));
-  start.addEventListener("click", () => void begin());
+  start.addEventListener("click", () => void begin(false));
+  watch.addEventListener("click", () => void begin(true));
 
   root.replaceChildren(
     h(
@@ -194,7 +225,7 @@ export function playView(root: HTMLElement): () => void {
           { class: "lede" },
           "A game sets the pins of a song circuit while it plays. Your score raises the intensity pin, and each new channel joins as its layer is reached. Every 40 points a boss wave switches on the drive pin, and the tempo jumps from 116 to 168 BPM.",
         ),
-        h("div", { class: "row" }, start, hud),
+        h("div", { class: "row" }, start, watch, hud),
       ),
       canvas,
       source,
@@ -213,7 +244,11 @@ song.setIntensity(2);  // 0-3: channels join as their layer is reached
 song.setDrive(true);   // the song's faster tempo`,
         ),
       ),
-      h("p", { class: "muted small" }, "gatefold.js and its worklet are files of your own site, so a DeWEB game keeps playing from chain bytes with no request outside rpc.xlayer.tech."),
+      h(
+        "p",
+        { class: "muted small" },
+        "gatefold.js and its worklet are files of your own site, so a DeWEB game keeps playing from chain bytes with no request outside rpc.xlayer.tech.",
+      ),
     ),
   );
   draw();

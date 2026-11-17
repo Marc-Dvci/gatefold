@@ -56,7 +56,13 @@ export class Processor {
   }
 
   /** One beat on the chain with caller-supplied state (TAP-02 §6 `step`). Bits in, bits out. */
-  async step(id: bigint, nState: number, nOut: number, state: Uint8Array, inputs: Uint8Array): Promise<{ newState: Uint8Array; outputs: Uint8Array }> {
+  async step(
+    id: bigint,
+    nState: number,
+    nOut: number,
+    state: Uint8Array,
+    inputs: Uint8Array,
+  ): Promise<{ newState: Uint8Array; outputs: Uint8Array }> {
     const data = encodeCall(SEL.step, [
       { type: "uint", value: id },
       { type: "bytes", value: pack(state) },
@@ -92,7 +98,13 @@ export interface ChainCircuit {
  * Read a circuit and everything it references, check it against TAP-02 §3 and its `circuitInfo`, and return it ready
  * to evaluate. Refuses closures beyond LIMITS before evaluating anything.
  */
-export async function loadFromChain(rpc: JsonRpc, cpu: string, id: bigint, block = "latest", known?: (cpu: string, id: bigint) => Circuit | undefined): Promise<ChainCircuit> {
+export async function loadFromChain(
+  rpc: JsonRpc,
+  cpu: string,
+  id: bigint,
+  block = "latest",
+  known?: (cpu: string, id: bigint) => Circuit | undefined,
+): Promise<ChainCircuit> {
   const closure = new Map<string, { bytes: Uint8Array; info: CircuitInfo }>();
   const visit = async (c: string, i: bigint, depth: number): Promise<void> => {
     const key = refKey(c, i);
@@ -101,7 +113,8 @@ export async function loadFromChain(rpc: JsonRpc, cpu: string, id: bigint, block
     if (closure.size >= LIMITS.maxCircuits) throw new IllFormed(`more than ${LIMITS.maxCircuits} circuits in the REF closure`);
     const p = new Processor(rpc, c, block);
     const info = await p.info(i);
-    if (info.gateCount > LIMITS.maxGates) throw new IllFormed(`circuit has ${info.gateCount} gates, above the ${LIMITS.maxGates} this player evaluates`);
+    if (info.gateCount > LIMITS.maxGates)
+      throw new IllFormed(`circuit has ${info.gateCount} gates, above the ${LIMITS.maxGates} this player evaluates`);
     const bytes = await p.netlist(i);
     closure.set(key, { bytes, info });
     // Find REF targets by decoding without resolving.
@@ -124,10 +137,19 @@ export async function loadFromChain(rpc: JsonRpc, cpu: string, id: bigint, block
   for (const [key, entry] of closure) {
     const c = loaded.get(key)!;
     if (c.nState !== entry.info.nState || c.nGates !== entry.info.gateCount) {
-      throw new IllFormed(`circuit ${key} decodes to ${c.nState} state bits and ${c.nGates} gates, but the chain reports ${entry.info.nState} and ${entry.info.gateCount}`);
+      throw new IllFormed(
+        `circuit ${key} decodes to ${c.nState} state bits and ${c.nGates} gates, but the chain reports ${entry.info.nState} and ${entry.info.gateCount}`,
+      );
     }
   }
-  return { cpu: cpu.toLowerCase(), id, info: top?.info ?? { nIn: circuit.nIn, nOut: circuit.nOut, nState: circuit.nState, gateCount: circuit.nGates }, bytes: top?.bytes ?? new Uint8Array(), circuit, closure };
+  return {
+    cpu: cpu.toLowerCase(),
+    id,
+    info: top?.info ?? { nIn: circuit.nIn, nOut: circuit.nOut, nState: circuit.nState, gateCount: circuit.nGates },
+    bytes: top?.bytes ?? new Uint8Array(),
+    circuit,
+    closure,
+  };
 }
 
 export { bytesToHex };

@@ -1,8 +1,4 @@
-# docker compose up demo   no keys                       http://localhost:8080
-# docker compose up app    live features, keys from .env  http://localhost:8787
-#
-# Both listen on this machine only: anyone who can reach `app` can spend your API credit.
-# Add a named volume to `app` if it keeps state.
+# docker compose up    the site on this machine only: http://localhost:8080
 services:
   demo:
     build:
@@ -10,15 +6,4 @@ services:
       target: demo
     image: "gatefold:demo"
     ports:
-      - "127.0.0.1:8080:8787"
-
-  app:
-    build:
-      context: .
-      target: app
-    image: "gatefold:app"
-    env_file:
-      - path: .env
-        required: false
-    ports:
-      - "127.0.0.1:8787:8787"
+      - "127.0.0.1:8080:8080"

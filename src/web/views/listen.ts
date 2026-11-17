@@ -178,7 +178,8 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
             const t0 = performance.now();
             const remote = await proc.step(onChain.id, cs.circuit.nState, cs.circuit.nOut, state, pins);
             const ms = Math.round(performance.now() - t0);
-            const same = bytesToHex(remote.newState) === bytesToHex(local.newState) && bytesToHex(remote.outputs) === bytesToHex(local.outputs);
+            const same =
+              bytesToHex(remote.newState) === bytesToHex(local.newState) && bytesToHex(remote.outputs) === bytesToHex(local.outputs);
             out.textContent = same
               ? `Match: X Layer computed the same next state (${cs.circuit.nState} bits) and the same sample in ${ms} ms.`
               : "Mismatch between this player and X Layer.";
@@ -192,7 +193,15 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
     );
     chainBox.append(
       h("h3", null, "On X Layer"),
-      h("p", null, "Pressed as circuit ", h("strong", null, `#${onChain.id}`), " of processor ", h("code", null, fmt.addr(onChain.processor)), ` (block ${fmt.int(DEPLOYMENT!.block)}).`),
+      h(
+        "p",
+        null,
+        "Pressed as circuit ",
+        h("strong", null, `#${onChain.id}`),
+        " of processor ",
+        h("code", null, fmt.addr(onChain.processor)),
+        ` (block ${fmt.int(DEPLOYMENT!.block)}).`,
+      ),
       h("div", { class: "row" }, cmpBtn, stepBtn),
       out,
     );
@@ -234,7 +243,13 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
       "div",
       { class: "sleeve" },
       canvas,
-      h("div", { class: "sleeve-title" }, h("span", { class: "side big" }, entry.side), h("h1", { class: song.title.length > 18 ? "long" : undefined }, song.title), h("p", null, song.artist)),
+      h(
+        "div",
+        { class: "sleeve-title" },
+        h("span", { class: "side big" }, entry.side),
+        h("h1", { class: song.title.length > 18 ? "long" : undefined }, song.title),
+        h("p", null, song.artist),
+      ),
     ),
     h(
       "div",
@@ -251,7 +266,12 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
         "fieldset",
         { class: "pins" },
         h("legend", null, "Pins a game can drive"),
-        h("div", { class: "pin" }, h("span", { id: "int-label" }, "Intensity"), h("div", { class: "segs", role: "group", "aria-labelledby": "int-label" }, ...intensityButtons)),
+        h(
+          "div",
+          { class: "pin" },
+          h("span", { id: "int-label" }, "Intensity"),
+          h("div", { class: "segs", role: "group", "aria-labelledby": "int-label" }, ...intensityButtons),
+        ),
         h("div", { class: "pin" }, h("label", { for: "drive" }, "Drive (faster tempo)"), driveBox),
         h("p", { class: "muted small" }, `Input pins ${PIN_NAMES.join(", ")}. A channel plays when the intensity reaches its layer.`),
       ),
@@ -272,7 +292,12 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
     const mine = player.loadedKey === key && player.playing;
     playBtn.textContent = mine ? "Pause" : "Play";
     playBtn.setAttribute("aria-label", mine ? "Pause" : "Play");
-    engineNote.textContent = player.loadedKey === key && player.engineKind ? (player.engineKind === "compiled" ? "compiled to JavaScript" : "typed-array interpreter") : "";
+    engineNote.textContent =
+      player.loadedKey === key && player.engineKind
+        ? player.engineKind === "compiled"
+          ? "compiled to JavaScript"
+          : "typed-array interpreter"
+        : "";
   };
   playBtn.addEventListener("click", async () => {
     if (player.loadedKey === key && player.playing) {

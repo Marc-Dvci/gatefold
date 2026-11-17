@@ -1,0 +1,12 @@
+dist
+coverage
+contracts
+node_modules
+scratch
+examples
+third_party
+docs/evidence
+deployments
+tests/fixtures
+package-lock.json
+*.md

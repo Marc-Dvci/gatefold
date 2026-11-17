@@ -90,6 +90,7 @@ contract GatefoldRecords {
     error NothingOwed();
     error TransferFailed();
     error Reentered();
+    error IdTooLarge();
 
     modifier nonReentrant() {
         if (_lock != 1) revert Reentered();
@@ -118,6 +119,8 @@ contract GatefoldRecords {
         if (!factory.isCPU(cpu)) revert NotAProcessor(cpu);
         if (IProcessor(cpu).ownerOf(id) != msg.sender) revert NotCircuitOwner();
         if (upstreamBps > MAX_BPS) revert BadShare();
+        // TAP-02 REF records name circuits with a u64 id, so no larger id can be referenced or stored here.
+        if (id > type(uint64).max) revert IdTooLarge();
         key = keyOf(cpu, id);
         if (releases[key].exists) revert AlreadyReleased();
         (address[] memory cpus, uint64[] memory ids) = refTargets(IProcessor(cpu).netlist(id));
@@ -127,6 +130,7 @@ contract GatefoldRecords {
             if (!releases[pk].exists || _contains(parents, pk)) continue;
             parents.push(pk);
         }
+        // forge-lint: disable-next-line(unsafe-typecast)
         releases[key] = Release({cpu: cpu, id: uint64(id), price: price, upstreamBps: upstreamBps, exists: true});
         emit Released(key, cpu, id, price, upstreamBps, parents, meta);
     }

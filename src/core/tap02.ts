@@ -270,7 +270,7 @@ export function pack(bits: ArrayLike<number>): Uint8Array {
 /** Unpack as the deployed evaluator reads inputs and state: missing bytes read as 0, extra bits ignored (§5). */
 export function unpack(data: Uint8Array, n: number): Uint8Array {
   const out = new Uint8Array(n);
-  for (let i = 0; i < n; i++) out[i] = (i >> 3) < data.length ? (data[i >> 3]! >> (i & 7)) & 1 : 0;
+  for (let i = 0; i < n; i++) out[i] = i >> 3 < data.length ? (data[i >> 3]! >> (i & 7)) & 1 : 0;
   return out;
 }
 

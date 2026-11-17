@@ -96,10 +96,7 @@ export const LOCAL_CPU = "0x00000000000000000000000000000000ca55e77e";
 
 /** Instruments at ids 1-5 of the local preview processor. */
 export function localLibrary(): Library {
-  return new Library(
-    LOCAL_CPU,
-    Object.fromEntries(Object.keys(INSTRUMENTS).map((k, i) => [k, BigInt(i + 1)])),
-  );
+  return new Library(LOCAL_CPU, Object.fromEntries(Object.keys(INSTRUMENTS).map((k, i) => [k, BigInt(i + 1)])));
 }
 
 export interface ChannelInfo {
@@ -276,9 +273,7 @@ export function compileSong(song: Song, lib: Library): CompiledSong {
     const inc = rom(n, idx, [0, ...distinct], INC_BITS);
     const sounding = n.not(isZero(n, idx));
     const relAt = (beats: number): number => Math.max(1, Math.round(beats * release));
-    const releasing = legato
-      ? 0
-      : n.and(lastBit, n.mux(drive, geConst(n, t, relAt(driveRowBeats)), geConst(n, t, relAt(rowBeats))));
+    const releasing = legato ? 0 : n.and(lastBit, n.mux(drive, geConst(n, t, relAt(driveRowBeats)), geConst(n, t, relAt(rowBeats))));
     const on = n.and(sounding, n.not(releasing));
     const layerOn = geConst(n, intensity, layer);
     n.region = `${ch.name} control`;

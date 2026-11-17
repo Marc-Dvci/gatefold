@@ -144,33 +144,52 @@ describe("compiled engines agree with the TAP-02 reference evaluator", () => {
 
 describe("flattening", () => {
   it("keeps the TAP-02 state layout: a REF instance owns a contiguous block after the LATCHes before it", () => {
-    const toggle = load(new Uint8Array(encode([
-      { op: OP_LATCH, d: 7, out: 3 },
-      { op: OP_NAND, a: 3, b: 2, out: 4 },
-      { op: OP_NAND, a: 3, b: 4, out: 5 },
-      { op: OP_NAND, a: 2, b: 4, out: 6 },
-      { op: OP_NAND, a: 5, b: 6, out: 7 },
-    ])), 1, 1);
+    const toggle = load(
+      new Uint8Array(
+        encode([
+          { op: OP_LATCH, d: 7, out: 3 },
+          { op: OP_NAND, a: 3, b: 2, out: 4 },
+          { op: OP_NAND, a: 3, b: 4, out: 5 },
+          { op: OP_NAND, a: 2, b: 4, out: 6 },
+          { op: OP_NAND, a: 5, b: 6, out: 7 },
+        ]),
+      ),
+      1,
+      1,
+    );
     const resolve = () => toggle;
-    const top = load(encode([
-      { op: OP_LATCH, d: 2, out: 3 },
-      { op: OP_REF, cpu: SUB_CPU, id: 1n, ins: [2], nOut: 1, out: 4 },
-      { op: OP_REF, cpu: SUB_CPU, id: 1n, ins: [3], nOut: 1, out: 5 },
-      { op: OP_NAND, a: 4, b: 5, out: 6 },
-    ]), 1, 1, resolve);
+    const top = load(
+      encode([
+        { op: OP_LATCH, d: 2, out: 3 },
+        { op: OP_REF, cpu: SUB_CPU, id: 1n, ins: [2], nOut: 1, out: 4 },
+        { op: OP_REF, cpu: SUB_CPU, id: 1n, ins: [3], nOut: 1, out: 5 },
+        { op: OP_NAND, a: 4, b: 5, out: 6 },
+      ]),
+      1,
+      1,
+      resolve,
+    );
     const p = flatten(top);
     expect(p.nState).toBe(3);
-    expect(p.instances.map((i) => [i.stateStart, i.stateEnd])).toEqual([[0, 3], [1, 2], [2, 3]]);
+    expect(p.instances.map((i) => [i.stateStart, i.stateEnd])).toEqual([
+      [0, 3],
+      [1, 2],
+      [2, 3],
+    ]);
     expect(Array.from(p.latchNode).every((n) => p.kind[n] === K_LATCH)).toBe(true);
   });
 
   it("simplification keeps every LATCH and removes logic that reaches nothing", () => {
-    const c = load(encode([
-      { op: OP_NAND, a: 2, b: 2, out: 3 }, // dead
-      { op: OP_LATCH, d: 2, out: 4 }, // unused latch: kept, since state is compared with the chain
-      { op: OP_NAND, a: 2, b: 1, out: 5 }, // NOT x
-      { op: OP_NAND, a: 5, b: 5, out: 6 }, // NOT NOT x = x
-    ]), 1, 1);
+    const c = load(
+      encode([
+        { op: OP_NAND, a: 2, b: 2, out: 3 }, // dead
+        { op: OP_LATCH, d: 2, out: 4 }, // unused latch: kept, since state is compared with the chain
+        { op: OP_NAND, a: 2, b: 1, out: 5 }, // NOT x
+        { op: OP_NAND, a: 5, b: 5, out: 6 }, // NOT NOT x = x
+      ]),
+      1,
+      1,
+    );
     const p = simplify(flatten(c));
     expect(p.nState).toBe(1);
     expect(gateCount(p)).toBe(0);

@@ -251,10 +251,7 @@ export class Net {
     index[1] = 1;
     this.inputs.forEach((s, i) => (index[s] = 2 + i));
     let next = 2 + this.inputs.length;
-    type Pending =
-      | { kind: "nand"; s: Sig }
-      | { kind: "latch"; s: Sig }
-      | { kind: "ref"; r: number };
+    type Pending = { kind: "nand"; s: Sig } | { kind: "latch"; s: Sig } | { kind: "ref"; r: number };
     const order: Pending[] = [];
     const refEmitted = new Uint8Array(this.refCalls.length);
     for (let s = 2; s < this.kind.length; s++) {

@@ -41,7 +41,9 @@ const recording = JSON.parse(readFileSync(new URL("./fixtures/xlayer-rpc-recordi
 function replay(): Fetch {
   return async (_url, init) => {
     const req = JSON.parse(init.body) as { method: string; params: unknown[]; id: number };
-    const hit = recording.calls.find((c) => c.request.method === req.method && JSON.stringify(c.request.params) === JSON.stringify(req.params));
+    const hit = recording.calls.find(
+      (c) => c.request.method === req.method && JSON.stringify(c.request.params) === JSON.stringify(req.params),
+    );
     if (!hit) throw new Error(`no recorded answer for ${req.method} ${JSON.stringify(req.params).slice(0, 80)}`);
     return { ok: true, status: 200, json: async () => ({ ...(hit.response as object), id: req.id }) };
   };
@@ -75,7 +77,10 @@ describe("ABI encoding, held to viem", () => {
     const ref = decodeAbiParameters([{ type: "bytes" }, { type: "bytes" }], enc);
     expect(bytesToHex(a!)).toBe(ref[0]);
     expect(bytesToHex(b!)).toBe(ref[1]);
-    const tup = encodeAbiParameters([{ type: "uint32" }, { type: "address" }, { type: "bool" }], [25, "0x00000000000000000000000000000000ca55e77e", true]);
+    const tup = encodeAbiParameters(
+      [{ type: "uint32" }, { type: "address" }, { type: "bool" }],
+      [25, "0x00000000000000000000000000000000ca55e77e", true],
+    );
     expect(decodeResult(tup, ["uint", "address", "bool"])).toEqual([25n, "0x00000000000000000000000000000000ca55e77e", true]);
   });
 
@@ -84,7 +89,9 @@ describe("ABI encoding, held to viem", () => {
     const hex = bytesToHex(nl) as `0x${string}`;
     expect(tapeoutData(nl, 2, 1)).toBe(encodeFunctionData({ abi, functionName: "tapeout", args: [hex, 2, 1] }));
     expect(mintData(1n, 9n)).toBe(encodeFunctionData({ abi, functionName: "mint", args: [1n, 9n] }));
-    expect(approveData("0x" + "11".repeat(20), 5n)).toBe(encodeFunctionData({ abi, functionName: "approve", args: [("0x" + "11".repeat(20)) as `0x${string}`, 5n] }));
+    expect(approveData("0x" + "11".repeat(20), 5n)).toBe(
+      encodeFunctionData({ abi, functionName: "approve", args: [("0x" + "11".repeat(20)) as `0x${string}`, 5n] }),
+    );
   });
 
   it("every selector is the keccak of its signature", () => {
@@ -158,7 +165,9 @@ describe("the X Layer client, on answers recorded from X Layer mainnet", () => {
 });
 
 describe("JSON-RPC failure paths", () => {
-  const answer = (body: unknown, ok = true, status = 200): Fetch => async () => ({ ok, status, json: async () => body });
+  const answer =
+    (body: unknown, ok = true, status = 200): Fetch =>
+    async () => ({ ok, status, json: async () => body });
 
   it("reports an HTTP error", async () => {
     await expect(new JsonRpc("x", answer({}, false, 503)).blockNumber()).rejects.toThrow("HTTP 503");
@@ -222,10 +231,9 @@ describe("chain loading refuses what it cannot evaluate safely (TAP-02 §7)", ()
       const data = req.params[0].data;
       const id = BigInt("0x" + data.slice(10, 74));
       const ref = "02" + cpu + (id + 1n).toString(16).padStart(16, "0") + "0101" + "000002";
-      const result =
-        data.startsWith(SEL.circuitInfo)
-          ? encodeAbiParameters([{ type: "uint32" }, { type: "uint32" }, { type: "uint32" }, { type: "uint32" }], [1, 1, 0, 1])
-          : encodeAbiParameters([{ type: "bytes" }], [("0x" + ref) as `0x${string}`]);
+      const result = data.startsWith(SEL.circuitInfo)
+        ? encodeAbiParameters([{ type: "uint32" }, { type: "uint32" }, { type: "uint32" }, { type: "uint32" }], [1, 1, 0, 1])
+        : encodeAbiParameters([{ type: "bytes" }], [("0x" + ref) as `0x${string}`]);
       return { ok: true, status: 200, json: async () => ({ id: req.id, result }) };
     };
     await expect(loadFromChain(new JsonRpc("x", deep), "0x" + cpu, 1n)).rejects.toThrow("REF nesting deeper");
@@ -241,8 +249,16 @@ describe("the tape-out path through a wallet", () => {
       gasUsed: "0x1",
       blockNumber: "0x1",
       logs: [
-        { address: "0x" + "cc".repeat(20), topics: [TRANSFER_TOPIC, "0x" + "0".repeat(64), "0x" + me.slice(2).padStart(64, "0"), "0x" + "9".padStart(64, "0")], data: "0x" },
-        { address: cpu, topics: [TRANSFER_TOPIC, "0x" + "0".repeat(64), "0x" + me.slice(2).padStart(64, "0"), "0x" + "7".padStart(64, "0")], data: "0x" },
+        {
+          address: "0x" + "cc".repeat(20),
+          topics: [TRANSFER_TOPIC, "0x" + "0".repeat(64), "0x" + me.slice(2).padStart(64, "0"), "0x" + "9".padStart(64, "0")],
+          data: "0x",
+        },
+        {
+          address: cpu,
+          topics: [TRANSFER_TOPIC, "0x" + "0".repeat(64), "0x" + me.slice(2).padStart(64, "0"), "0x" + "7".padStart(64, "0")],
+          data: "0x",
+        },
       ],
     };
     expect(mintedId(r, cpu, me)).toBe(7n);
@@ -254,11 +270,19 @@ describe("the tape-out path through a wallet", () => {
     const slow: Fetch = async (_u, init) => {
       const req = JSON.parse(init.body) as { id: number };
       n++;
-      return { ok: true, status: 200, json: async () => ({ id: req.id, result: n < 3 ? null : { status: "0x1", logs: [], gasUsed: "0x5", blockNumber: "0x9" } }) };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ id: req.id, result: n < 3 ? null : { status: "0x1", logs: [], gasUsed: "0x5", blockNumber: "0x9" } }),
+      };
     };
     const r = await waitReceipt(new JsonRpc("x", slow), "0xabc", 10_000, async () => undefined);
     expect(r.gasUsed).toBe("0x5");
-    const failed: Fetch = async () => ({ ok: true, status: 200, json: async () => ({ result: { status: "0x0", logs: [], gasUsed: "0x5", blockNumber: "0x9" } }) });
+    const failed: Fetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ result: { status: "0x0", logs: [], gasUsed: "0x5", blockNumber: "0x9" } }),
+    });
     await expect(waitReceipt(new JsonRpc("x", failed), "0xdef", 10_000, async () => undefined)).rejects.toThrow("reverted");
     const never: Fetch = async () => ({ ok: true, status: 200, json: async () => ({ result: null }) });
     await expect(waitReceipt(new JsonRpc("x", never), "0x1", -1, async () => undefined)).rejects.toThrow("no receipt");
@@ -291,20 +315,23 @@ describe("the tape-out path through a wallet", () => {
   it("reads prices and balances, for OKB-priced and BEM-priced transistors", async () => {
     const enc = (v: bigint) => encodeAbiParameters([{ type: "uint256" }], [v]);
     const addr = (a: string) => encodeAbiParameters([{ type: "address" }], [a as `0x${string}`]);
-    const make = (bem: boolean): Fetch => async (_u, init) => {
-      const req = JSON.parse(init.body) as { params: [{ data: string }]; id: number };
-      const sel = req.params[0].data.slice(0, 10);
-      const map: Record<string, string> = {
-        [WSEL.transistors]: addr("0x" + "22".repeat(20)),
-        [WSEL.TAPEOUT_FEE]: enc(1_300_000_000_000_000n),
-        [WSEL.mintPrice]: enc(100n),
-        [WSEL.protocolFee]: enc(1_000_000n),
-        [WSEL.balanceOf1155]: enc(12n),
+    const make =
+      (bem: boolean): Fetch =>
+      async (_u, init) => {
+        const req = JSON.parse(init.body) as { params: [{ data: string }]; id: number };
+        const sel = req.params[0].data.slice(0, 10);
+        const map: Record<string, string> = {
+          [WSEL.transistors]: addr("0x" + "22".repeat(20)),
+          [WSEL.TAPEOUT_FEE]: enc(1_300_000_000_000_000n),
+          [WSEL.mintPrice]: enc(100n),
+          [WSEL.protocolFee]: enc(1_000_000n),
+          [WSEL.balanceOf1155]: enc(12n),
+        };
+        if (sel === WSEL.BEM && !bem)
+          return { ok: true, status: 200, json: async () => ({ id: req.id, error: { code: 3, message: "execution reverted" } }) };
+        const result = sel === WSEL.BEM ? addr("0x60e62efa9405d6873c5deabd4e6cc91c25363952") : map[sel];
+        return { ok: true, status: 200, json: async () => ({ id: req.id, result }) };
       };
-      if (sel === WSEL.BEM && !bem) return { ok: true, status: 200, json: async () => ({ id: req.id, error: { code: 3, message: "execution reverted" } }) };
-      const result = sel === WSEL.BEM ? addr("0x60e62efa9405d6873c5deabd4e6cc91c25363952") : map[sel];
-      return { ok: true, status: 200, json: async () => ({ id: req.id, result }) };
-    };
     const okb = await pricing(new JsonRpc("x", make(false)), "0x" + "11".repeat(20), "0x" + "33".repeat(20));
     expect(okb).toMatchObject({ tapeoutFee: 1_300_000_000_000_000n, mintPrice: 100n, payToken: null, nand: 12n, latch: 12n });
     const bem = await pricing(new JsonRpc("x", make(true)), "0x" + "11".repeat(20), "0x" + "33".repeat(20));

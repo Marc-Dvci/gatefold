@@ -47,7 +47,13 @@ export function regionColor(region: string): [number, number, number] {
 }
 
 /** Squarified treemap of weights into a rectangle. */
-export function squarify(weights: number[], x: number, y: number, w: number, h: number): Array<{ x: number; y: number; w: number; h: number }> {
+export function squarify(
+  weights: number[],
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+): Array<{ x: number; y: number; w: number; h: number }> {
   const total = weights.reduce((a, b) => a + b, 0);
   const out = new Array<{ x: number; y: number; w: number; h: number }>(weights.length);
   if (total <= 0 || weights.length === 0) return out.fill({ x, y, w: 0, h: 0 });

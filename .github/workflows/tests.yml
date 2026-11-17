@@ -1,6 +1,6 @@
-# On every push: lint, format, types, tests with coverage of the decision core, spelling and local links (Python);
-# the web build when there is one; and the Docker image, started and asked for its health and its page.
-# Read-only: nothing here writes to the repository.
+# On every push: lint, format, types, unit and property tests with coverage, the browser tests with axe-core, the
+# Solidity tests with fuzzing, the cross-check against the official TAP-02 reference implementation, spelling and
+# links, and the Docker image started and asked for its page. Read-only: nothing here writes to the repository.
 name: tests
 on:
   push:
@@ -9,75 +9,100 @@ on:
 permissions:
   contents: read
 jobs:
-  python:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx eslint .
+      - run: npx prettier --check .
+      - run: npx tsc --noEmit
+      - name: Unit and property tests in random order, with coverage of the core and the chain client
+        run: npx vitest run --coverage --sequence.shuffle --reporter=default --reporter=json --outputFile=vitest.json
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Browser tests (every page, axe-core accessibility, phone width)
+        run: npx playwright test
+      - name: Summary on the run page
+        if: always()
+        run: |
+          node -e '
+            const fs = require("fs");
+            const v = JSON.parse(fs.readFileSync("vitest.json", "utf8"));
+            const c = JSON.parse(fs.readFileSync("coverage/coverage-summary.json", "utf8"));
+            const out = [];
+            out.push("### Unit and property tests", "", `${v.numPassedTests} passed, ${v.numFailedTests} failed, ${v.numPendingTests} skipped`, "");
+            out.push("| Module | Lines | Branches | Functions |", "|---|---|---|---|");
+            const rows = {};
+            for (const [f, s] of Object.entries(c)) {
+              if (f === "total") continue;
+              const m = f.replace(/\/g, "/").match(/src\/(core|chain)\//); if (!m) continue;
+              const r = rows[m[1]] ??= { l: [0, 0], b: [0, 0], f: [0, 0] };
+              r.l[0] += s.lines.covered; r.l[1] += s.lines.total; r.b[0] += s.branches.covered; r.b[1] += s.branches.total; r.f[0] += s.functions.covered; r.f[1] += s.functions.total;
+            }
+            const pct = ([a, b]) => (b ? (100 * a / b).toFixed(1) : "100.0") + " %";
+            for (const [m, r] of Object.entries(rows)) out.push(`| src/${m} | ${pct(r.l)} | ${pct(r.b)} | ${pct(r.f)} |`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, out.join("\n") + "\n");
+          '
+  contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: foundry-rs/foundry-toolchain@v1
+      - run: forge fmt --check
+      - name: Solidity tests, fuzzing included
+        run: forge test -vv | tee forge.log
+      - if: always()
+        run: |
+          {
+            echo "### Gatefold Records (Foundry)"
+            echo
+            grep -E "Suite result|tests passed" forge.log | tail -n 2
+          } >> "$GITHUB_STEP_SUMMARY"
+  reference:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
-          cache-dependency-path: requirements*.txt
-      - run: pip install -r requirements-dev.txt
-      - run: ruff check .
-      - run: ruff format --check .
-      - run: mypy
-      - name: Tests in random order, with line and branch coverage of the decision core
-        shell: bash
-        run: python -m pytest -q --cov --randomly-seed="$GITHUB_RUN_ID" | tee pytest.log
-      - name: Summary on the run page
-        if: always()
-        shell: bash
+      - name: Replay every song with the official TAP-02 reference implementation
+        run: python scripts/crosscheck_reference.py | tee crosscheck.log
+      - if: always()
         run: |
-          count() { python -m pytest --collect-only -q -p no:randomly -m "$1" 2>/dev/null | tail -n 1 | grep -Eo '^[0-9]+' || echo 0; }
-          {
-            echo "### Tests"
-            echo
-            grep -E "passed|failed" pytest.log | tail -n 1
-            echo "Random order: replay it with \`python -m pytest --randomly-seed=$GITHUB_RUN_ID\`."
-            echo
-            echo "| Kind | Tests |"
-            echo "|---|---|"
-            echo "| Unit | $(count 'not integration and not e2e and not live') |"
-            echo "| Integration | $(count integration) |"
-            echo "| End-to-end | $(count e2e) |"
-            echo
-            echo "### Coverage of the decision core (lines and branches)"
-            echo
-            python -m coverage report --format=markdown
-          } >> "$GITHUB_STEP_SUMMARY"
-      - run: codespell
-      - run: python scripts/check_links.py
-      - run: python scripts/check_placeholders.py
-  web:
+          { echo "### TAP-02 reference implementation, replaying the songs"; echo; cat crosscheck.log; } >> "$GITHUB_STEP_SUMMARY"
+  docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - id: has
-        run: echo "build=$([ -f web/package.json ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
-      - if: steps.has.outputs.build == 'yes'
-        uses: actions/setup-node@v4
+      - uses: actions/setup-python@v5
         with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: web/package-lock.json
-      - if: steps.has.outputs.build == 'yes'
-        working-directory: web
-        run: |
-          npm ci
-          npx tsc -b
-          npx eslint src
-          npx vite build
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check scripts
+      - run: codespell
+      - run: python scripts/check_links.py
+      - run: python scripts/check_placeholders.py
   docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker build --target demo -t project:demo .
-      - run: docker run -d --name demo -p 127.0.0.1:8787:8787 project:demo
-      - name: The API and the web app answer
+      - run: docker build -t gatefold:demo .
+      - run: docker run -d --name demo -p 127.0.0.1:8080:8080 gatefold:demo
+      - name: The site answers, with its worklet and fonts
         run: |
-          for i in $(seq 1 30); do curl -fs http://127.0.0.1:8787/api/health > /dev/null && break; sleep 2; done
-          curl -fs http://127.0.0.1:8787/api/health | grep -q '"demo":true'
-          curl -fs http://127.0.0.1:8787/ | grep -q '<title>'
+          for i in $(seq 1 30); do curl -fs http://127.0.0.1:8080/ > /dev/null && break; sleep 1; done
+          curl -fs http://127.0.0.1:8080/ | grep -q '<title>Gatefold'
+          curl -fs http://127.0.0.1:8080/fonts/inter-tight-latin-400-normal.woff2 -o /dev/null
+          curl -fs http://127.0.0.1:8080/embed/gatefold.js -o /dev/null
       - if: failure()
         run: docker logs demo

@@ -106,15 +106,43 @@ export function studioView(root: HTMLElement): () => void {
 
   const field = (label: string, input: HTMLElement): HTMLElement => h("label", { class: "field" }, h("span", null, label), input);
   const num = (value: number, min: number, max: number, on: (v: number) => void): HTMLInputElement =>
-    h("input", { type: "number", value: String(value), min: String(min), max: String(max), onchange: (e: Event) => on(Number((e.target as HTMLInputElement).value)) });
+    h("input", {
+      type: "number",
+      value: String(value),
+      min: String(min),
+      max: String(max),
+      onchange: (e: Event) => on(Number((e.target as HTMLInputElement).value)),
+    });
 
   const header = h("div", { class: "song-fields" });
   function renderHeader(): void {
     header.replaceChildren(
-      field("Title", h("input", { type: "text", value: song.title, maxLength: 60, oninput: (e: Event) => ((song.title = (e.target as HTMLInputElement).value), changed(false)) })),
-      field("Artist", h("input", { type: "text", value: song.artist, maxLength: 60, oninput: (e: Event) => ((song.artist = (e.target as HTMLInputElement).value), changed(false)) })),
-      field("Tempo (BPM)", num(song.bpm, 30, 300, (v) => ((song.bpm = v), changed()))),
-      field("Drive tempo", num(song.driveBpm ?? song.bpm, 30, 300, (v) => ((song.driveBpm = v), changed()))),
+      field(
+        "Title",
+        h("input", {
+          type: "text",
+          value: song.title,
+          maxLength: 60,
+          oninput: (e: Event) => ((song.title = (e.target as HTMLInputElement).value), changed(false)),
+        }),
+      ),
+      field(
+        "Artist",
+        h("input", {
+          type: "text",
+          value: song.artist,
+          maxLength: 60,
+          oninput: (e: Event) => ((song.artist = (e.target as HTMLInputElement).value), changed(false)),
+        }),
+      ),
+      field(
+        "Tempo (BPM)",
+        num(song.bpm, 30, 300, (v) => ((song.bpm = v), changed())),
+      ),
+      field(
+        "Drive tempo",
+        num(song.driveBpm ?? song.bpm, 30, 300, (v) => ((song.driveBpm = v), changed())),
+      ),
       field(
         "Rows per beat",
         h(
@@ -136,7 +164,14 @@ export function studioView(root: HTMLElement): () => void {
           changed();
         };
         const sel = (label: string, value: number, options: string[], on: (v: number) => void): HTMLElement =>
-          field(label, h("select", { onchange: (e: Event) => on(Number((e.target as HTMLSelectElement).value)) }, ...options.map((o, j) => h("option", { value: String(j), selected: j === value }, o))));
+          field(
+            label,
+            h(
+              "select",
+              { onchange: (e: Event) => on(Number((e.target as HTMLSelectElement).value)) },
+              ...options.map((o, j) => h("option", { value: String(j), selected: j === value }, o)),
+            ),
+          );
         const ta = h("textarea", {
           spellcheck: false,
           rows: 3,
@@ -150,7 +185,15 @@ export function studioView(root: HTMLElement): () => void {
           h(
             "div",
             { class: "channel-head" },
-            field("Name", h("input", { type: "text", value: ch.name, maxLength: 16, onchange: (e: Event) => set("name", (e.target as HTMLInputElement).value) })),
+            field(
+              "Name",
+              h("input", {
+                type: "text",
+                value: ch.name,
+                maxLength: 16,
+                onchange: (e: Event) => set("name", (e.target as HTMLInputElement).value),
+              }),
+            ),
             field(
               "Instrument",
               h(
@@ -201,7 +244,13 @@ export function studioView(root: HTMLElement): () => void {
           class: "ghost",
           disabled: song.channels.length >= 8,
           onclick: () => {
-            song.channels.push({ name: `ch${song.channels.length + 1}`, instrument: "pulse", tone: 2, decay: 1, mml: "o4 l8 v10 c e g > c" });
+            song.channels.push({
+              name: `ch${song.channels.length + 1}`,
+              instrument: "pulse",
+              tone: 2,
+              decay: 1,
+              mml: "o4 l8 v10 c e g > c",
+            });
             renderChannels();
             changed();
           },
@@ -232,7 +281,12 @@ export function studioView(root: HTMLElement): () => void {
       stats.replaceChildren(
         h("div", null, h("dt", null, "Length"), h("dd", null, fmt.secs(cs.beats / BEAT_RATE), h("small", null, ` · ${cs.rows} rows`))),
         h("div", null, h("dt", null, "Netlist"), h("dd", null, fmt.int(cs.build.bytes.length), h("small", null, " bytes"))),
-        h("div", null, h("dt", null, "Transistors to burn"), h("dd", null, fmt.int(cs.build.nand + cs.build.latch), h("small", null, ` (${cs.build.nand} NAND, ${cs.build.latch} LATCH)`))),
+        h(
+          "div",
+          null,
+          h("dt", null, "Transistors to burn"),
+          h("dd", null, fmt.int(cs.build.nand + cs.build.latch), h("small", null, ` (${cs.build.nand} NAND, ${cs.build.latch} LATCH)`)),
+        ),
         h("div", null, h("dt", null, "With instruments"), h("dd", null, fmt.int(cs.circuit.nGates), h("small", null, " gates"))),
       );
       if (player.playing && player.loadedKey.startsWith("studio:")) void play(true);
@@ -286,7 +340,11 @@ export function studioView(root: HTMLElement): () => void {
         onclick: () => {
           if (!prep) return;
           const raw = renderBeats(prep.cs, prep.cs.beats, FULL);
-          download(`${song.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "song"}.wav`, wav(toPcm16(raw, song.channels.length)), "audio/wav");
+          download(
+            `${song.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "song"}.wav`,
+            wav(toPcm16(raw, song.channels.length)),
+            "audio/wav",
+          );
         },
       },
       "Download WAV",
@@ -301,7 +359,20 @@ export function studioView(root: HTMLElement): () => void {
           const cs = prep.cs;
           download(
             `${song.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "song"}.netlist.json`,
-            JSON.stringify({ format: "tap-02", nIn: cs.build.nIn, nOut: cs.build.nOut, nand: cs.build.nand, latch: cs.build.latch, refs: cs.build.refs, netlist: cs.netlistHex, song }, null, 2),
+            JSON.stringify(
+              {
+                format: "tap-02",
+                nIn: cs.build.nIn,
+                nOut: cs.build.nOut,
+                nand: cs.build.nand,
+                latch: cs.build.latch,
+                refs: cs.build.refs,
+                netlist: cs.netlistHex,
+                song,
+              },
+              null,
+              2,
+            ),
             "application/json",
           );
         },
@@ -367,7 +438,10 @@ export function studioView(root: HTMLElement): () => void {
               say(`Approving ${total} BEM base units for the transistor contract…`);
               await waitReceipt(rpc, await sendTx(wallet, account, price.payToken, approveData(price.transistors, total)));
             }
-            for (const [id, amt] of [[NAND_ID, missingN], [LATCH_ID, missingL]] as const) {
+            for (const [id, amt] of [
+              [NAND_ID, missingN],
+              [LATCH_ID, missingL],
+            ] as const) {
               if (amt === 0n) continue;
               const value = price.payToken ? 0n : mintCost(price, amt);
               say(`Minting ${amt} ${id === NAND_ID ? "NAND" : "LATCH"} transistors…`);
@@ -394,11 +468,19 @@ export function studioView(root: HTMLElement): () => void {
           const rpc = new JsonRpc();
           try {
             say(`Taping out ${fmt.int(cs.build.bytes.length)} bytes (fee ${fmt.okb(price.tapeoutFee)})…`);
-            const hash = await sendTx(wallet, account, DEPLOYMENT!.processor, tapeoutData(cs.build.bytes, cs.build.nIn, cs.build.nOut), price.tapeoutFee);
+            const hash = await sendTx(
+              wallet,
+              account,
+              DEPLOYMENT!.processor,
+              tapeoutData(cs.build.bytes, cs.build.nIn, cs.build.nOut),
+              price.tapeoutFee,
+            );
             const r = await waitReceipt(rpc, hash);
             const id = mintedId(r, DEPLOYMENT!.processor, account);
             say(`Pressed: circuit #${id} on processor ${fmt.addr(DEPLOYMENT!.processor)}, gas ${fmt.int(BigInt(r.gasUsed))}.`, true);
-            log.append(h("li", null, h("a", { href: `${XLAYER.explorer}/tx/${hash}`, target: "_blank", rel: "noopener" }, "Open the transaction")));
+            log.append(
+              h("li", null, h("a", { href: `${XLAYER.explorer}/tx/${hash}`, target: "_blank", rel: "noopener" }, "Open the transaction")),
+            );
           } catch (e) {
             say(`Tape-out: ${(e as Error).message}`, false);
           }
@@ -437,9 +519,24 @@ export function studioView(root: HTMLElement): () => void {
   const view = h(
     "section",
     { class: "studio" },
-    h("header", { class: "page-head" }, h("h1", null, "Studio"), h("p", { class: "lede" }, "Write each channel in MML, the notation chiptune composers have typed since the 1980s. Every change recompiles the song into gates and plays the new circuit."), loadSelect),
+    h(
+      "header",
+      { class: "page-head" },
+      h("h1", null, "Studio"),
+      h(
+        "p",
+        { class: "lede" },
+        "Write each channel in MML, the notation chiptune composers have typed since the 1980s. Every change recompiles the song into gates and plays the new circuit.",
+      ),
+      loadSelect,
+    ),
     header,
-    h("div", { class: "studio-grid" }, channelsBox, h("aside", { class: "studio-side" }, status, stats, roll, exportRow, tapeBox, mmlHelp())),
+    h(
+      "div",
+      { class: "studio-grid" },
+      channelsBox,
+      h("aside", { class: "studio-side" }, status, stats, roll, exportRow, tapeBox, mmlHelp()),
+    ),
   );
   root.replaceChildren(view);
   renderHeader();
@@ -470,6 +567,10 @@ function mmlHelp(): HTMLElement {
     "details",
     { class: "mml-help" },
     h("summary", null, "MML in one minute"),
-    h("table", null, h("tbody", null, ...rows.map(([a, b]) => h("tr", null, h("th", { scope: "row" }, h("code", null, a)), h("td", null, b))))),
+    h(
+      "table",
+      null,
+      h("tbody", null, ...rows.map(([a, b]) => h("tr", null, h("th", { scope: "row" }, h("code", null, a)), h("td", null, b)))),
+    ),
   );
 }

@@ -19,28 +19,61 @@ export function howView(root: HTMLElement): () => void {
       "Instruments by reference",
       "Each channel drives an instrument circuit through a TAP-02 REF record: pulse, triangle, noise, kick and arpeggio. A tape-out burns transistors only for the song's own gates.",
     ],
-    ["Netlist", `The result is a TAP-02 netlist: ${fmt.int(first.build.bytes.length)} bytes for "${first.song.title}", against ${fmt.bytes(cdWavBytes(secs))} for the same ${Math.round(secs)} seconds as a CD-quality WAV.`],
+    [
+      "Netlist",
+      `The result is a TAP-02 netlist: ${fmt.int(first.build.bytes.length)} bytes for "${first.song.title}", against ${fmt.bytes(cdWavBytes(secs))} for the same ${Math.round(secs)} seconds as a CD-quality WAV.`,
+    ],
     ["Tape-out", "One transaction stores the netlist on a TapeOut processor on X Layer and mints it as a circuit NFT."],
     [
       "Playback",
       `The player reads the netlist back from X Layer, inlines every REF, compiles the gates to JavaScript and runs them in an AudioWorklet, ${fmt.int(BEAT_RATE)} beats a second. One beat is one sample.`,
     ],
-    ["Proof", "Any beat can be sent to the processor's own step() through eth_call: the chain returns the same next state and the same sample."],
+    [
+      "Proof",
+      "Any beat can be sent to the processor's own step() through eth_call: the chain returns the same next state and the same sample.",
+    ],
   ];
   const uses: Array<[string, string]> = [
-    ["TapeOut circuits (NAND, LATCH, REF)", "Every song and every instrument is a circuit; LATCH holds oscillators, envelopes and the song position; REF puts instruments inside songs."],
-    ["Processor step() and eval()", "The chain recomputes any beat on request, so a listener can check that the player plays the chain's circuit."],
-    ["DeWEB and TapeKit", "Gatefold is a static site with no server; its only network request goes to rpc.xlayer.tech, the node a TapeKit gateway counts as the site's own."],
-    ["X Layer and USD₮0", "Tape-outs, circuit ownership, and licences paid in USD₮0 with one signed authorization (EIP-3009), split along the REF lineage by the Gatefold Records contract."],
+    [
+      "TapeOut circuits (NAND, LATCH, REF)",
+      "Every song and every instrument is a circuit; LATCH holds oscillators, envelopes and the song position; REF puts instruments inside songs.",
+    ],
+    [
+      "Processor step() and eval()",
+      "The chain recomputes any beat on request, so a listener can check that the player plays the chain's circuit.",
+    ],
+    [
+      "DeWEB and TapeKit",
+      "Gatefold is a static site with no server; its only network request goes to rpc.xlayer.tech, the node a TapeKit gateway counts as the site's own.",
+    ],
+    [
+      "X Layer and USD₮0",
+      "Tape-outs, circuit ownership, and licences paid in USD₮0 with one signed authorization (EIP-3009), split along the REF lineage by the Gatefold Records contract.",
+    ],
   ];
   root.replaceChildren(
     h(
       "section",
       { class: "how" },
-      h("header", { class: "page-head" }, h("h1", null, "Liner notes"), h("p", { class: "lede" }, "How a song becomes a chip on X Layer, and why the chain bytes are the song.")),
-      h("ol", { class: "steps" }, ...steps.map(([t, d], i) => h("li", null, h("span", { class: "n" }, String(i + 1).padStart(2, "0")), h("div", null, h("h2", null, t), h("p", null, d))))),
+      h(
+        "header",
+        { class: "page-head" },
+        h("h1", null, "Liner notes"),
+        h("p", { class: "lede" }, "How a song becomes a chip on X Layer, and why the chain bytes are the song."),
+      ),
+      h(
+        "ol",
+        { class: "steps" },
+        ...steps.map(([t, d], i) =>
+          h("li", null, h("span", { class: "n" }, String(i + 1).padStart(2, "0")), h("div", null, h("h2", null, t), h("p", null, d))),
+        ),
+      ),
       h("h2", null, "What each part of the ecosystem does here"),
-      h("table", { class: "uses" }, h("tbody", null, ...uses.map(([a, b]) => h("tr", null, h("th", { scope: "row" }, a), h("td", null, b))))),
+      h(
+        "table",
+        { class: "uses" },
+        h("tbody", null, ...uses.map(([a, b]) => h("tr", null, h("th", { scope: "row" }, a), h("td", null, b)))),
+      ),
       h(
         "p",
         { class: "muted" },

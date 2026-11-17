@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Gatefold architecture</title>
+    <!-- Source of docs/architecture.png: rendered at 2x by scripts/render_figures.mjs. -->
+    <style>
+      body {
+        margin: 0;
+        background: #fff;
+        font:
+          15px/1.35 "Segoe UI",
+          "Segoe UI Symbol",
+          system-ui,
+          sans-serif;
+        color: #14171f;
+      }
+      svg text {
+        font-family: "Segoe UI", "Segoe UI Symbol", "Noto Sans", system-ui, sans-serif;
+      }
+      .t {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .s {
+        font-size: 14px;
+        fill: #3b4252;
+      }
+      .lab {
+        font-size: 13px;
+        fill: #5b6475;
+      }
+    </style>
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" width="860" height="640" viewBox="0 0 860 640">
+      <defs>
+        <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#14171f" />
+        </marker>
+      </defs>
+      <!-- Browser band -->
+      <rect x="10" y="10" width="840" height="250" rx="10" fill="#f6f7fb" stroke="#d5d9e3" />
+      <text x="26" y="36" class="lab">IN THE BROWSER (a static site: on a DeWEB gateway, in Docker, or from source)</text>
+      <rect x="26" y="52" width="180" height="88" rx="8" fill="#fff" stroke="#14171f" />
+      <text x="40" y="78" class="t">Score</text>
+      <text x="40" y="100" class="s">MML per channel,</text>
+      <text x="40" y="118" class="s">typed in the Studio</text>
+      <rect x="236" y="52" width="250" height="88" rx="8" fill="#fff8e1" stroke="#b8860b" />
+      <text x="250" y="78" class="t">Compiler</text>
+      <text x="250" y="100" class="s">NAND + LATCH gates, ROM as a</text>
+      <text x="250" y="118" class="s">decision diagram, REF to instruments</text>
+      <rect x="516" y="52" width="318" height="88" rx="8" fill="#fff" stroke="#14171f" />
+      <text x="530" y="78" class="t">TAP-02 netlist</text>
+      <text x="530" y="100" class="s">a 27-second song: 6,865 bytes</text>
+      <text x="530" y="118" class="s">(the same audio as a WAV: 2.3 MB)</text>
+      <rect x="236" y="160" width="400" height="86" rx="8" fill="#e8f8f5" stroke="#1b9e8c" />
+      <text x="250" y="184" class="t">Player</text>
+      <text x="250" y="204" class="s">reads the netlists from X Layer, inlines every REF,</text>
+      <text x="250" y="222" class="s">compiles the gates to JavaScript; one beat is one</text>
+      <text x="250" y="240" class="s">sample, 24,000 a second, in an AudioWorklet</text>
+      <rect x="26" y="160" width="180" height="86" rx="8" fill="#fff" stroke="#14171f" />
+      <text x="40" y="186" class="t">Game or site</text>
+      <text x="40" y="208" class="s">sets the pins:</text>
+      <text x="40" y="226" class="s">intensity, drive</text>
+      <line x1="206" y1="96" x2="234" y2="96" stroke="#14171f" stroke-width="1.6" marker-end="url(#a)" />
+      <line x1="486" y1="96" x2="514" y2="96" stroke="#14171f" stroke-width="1.6" marker-end="url(#a)" />
+      <line x1="206" y1="203" x2="234" y2="203" stroke="#14171f" stroke-width="1.6" marker-end="url(#a)" />
+      <!-- X Layer band -->
+      <rect x="10" y="300" width="840" height="330" rx="10" fill="#f3f1ff" stroke="#c9c3f0" />
+      <text x="26" y="326" class="lab">ON X LAYER (chain 196)</text>
+      <rect x="444" y="342" width="390" height="130" rx="8" fill="#fff" stroke="#5b4fd6" />
+      <text x="458" y="368" class="t">Gatefold processor (TapeOut)</text>
+      <text x="458" y="392" class="s">5 instrument circuits: pulse, triangle, noise, kick, arp;</text>
+      <text x="458" y="412" class="s">song circuits that REF them; a tape-out burns</text>
+      <text x="458" y="432" class="s">transistors for a song's own gates only; each circuit</text>
+      <text x="458" y="452" class="s">is an NFT; step() recomputes any beat on request</text>
+      <rect x="26" y="342" width="390" height="130" rx="8" fill="#fff" stroke="#5b4fd6" />
+      <text x="40" y="368" class="t">Gatefold Records</text>
+      <text x="40" y="392" class="s">reads each release's REF records from its netlist;</text>
+      <text x="40" y="412" class="s">licences in USD₮0 with one signed authorization</text>
+      <text x="40" y="432" class="s">(EIP-3009): fee, then upstream shares along the REF</text>
+      <text x="40" y="452" class="s">lineage, then the current owner of the circuit NFT</text>
+      <rect x="26" y="492" width="808" height="120" rx="8" fill="#fff" stroke="#5b4fd6" />
+      <text x="40" y="518" class="t">DeWEB container of the theme song's circuit</text>
+      <text x="40" y="542" class="s">
+        the Gatefold site itself (12 files, about 210 KB), written through the DeWEB site store and read back byte for byte;
+      </text>
+      <text x="40" y="562" class="s">
+        served by any TapeKit gateway. Its only request goes to rpc.xlayer.tech, the node the gateway counts as the site's own,
+      </text>
+      <text x="40" y="582" class="s">so the page keeps the "100% on-chain" status while it plays music computed from chain bytes.</text>
+      <!-- Cross-band arrows -->
+      <line x1="740" y1="140" x2="740" y2="338" stroke="#5b4fd6" stroke-width="1.6" marker-end="url(#a)" />
+      <text x="750" y="250" class="lab">tape-out</text>
+      <text x="750" y="266" class="lab">(wallet)</text>
+      <line x1="540" y1="342" x2="540" y2="250" stroke="#1b9e8c" stroke-width="1.6" marker-end="url(#a)" />
+      <text x="548" y="290" class="lab">netlists, step()</text>
+    </svg>
+  </body>
+</html>

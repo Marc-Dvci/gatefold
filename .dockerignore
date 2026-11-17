@@ -1,8 +1,11 @@
-# An allowlist: nothing reaches a build unless it is named here, so keys, caches and runs cannot slip in.
+# An allowlist: nothing reaches a build unless it is named here.
 *
-!app/
+!package.json
+!package-lock.json
+!tsconfig.json
+!vite.config.ts
+!vite.embed.config.ts
+!src/
 !web/
-!requirements.txt
-
-**/__pycache__
-web/node_modules
+!songs/
+!deployments/
