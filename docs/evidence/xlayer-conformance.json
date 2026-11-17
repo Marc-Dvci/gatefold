@@ -1,0 +1,13 @@
+{
+  "what": "Gatefold's evaluators against X Layer step()/eval(), read-only, at one pinned block",
+  "date": "2026-11-17",
+  "block": "76108249",
+  "circuits": 80,
+  "stateful": 40,
+  "processors": 48,
+  "beats": 320,
+  "referenceMatches": 320,
+  "engineMatches": 320,
+  "failures": [],
+  "ms": 154884
+}

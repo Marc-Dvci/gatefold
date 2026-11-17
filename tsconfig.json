@@ -13,7 +13,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "types": ["node"],
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": { "@deployment": ["deployments/xlayer.json"] }
   },
   "include": ["src", "tests", "scripts", "e2e", "*.ts"]
 }

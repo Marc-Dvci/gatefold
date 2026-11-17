@@ -130,8 +130,9 @@ class GatefoldProcessor extends AudioWorkletProcessor {
     }
   }
 
+  /** Unipolar circuit word to a centred float: 0 is silence, and a DC blocker removes the average. */
   private toFloat(w: number): number {
-    const x = (w - this.mid) / this.mid;
+    const x = w / this.mid;
     const y = x - this.x1 + 0.9995 * this.y1;
     this.x1 = x;
     this.y1 = y;

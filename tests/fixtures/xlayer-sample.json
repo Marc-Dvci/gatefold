@@ -1,0 +1,654 @@
+{
+ "source": "circuitInfo of every circuit of every processor listed by the X Layer factory (read-only eth_call)",
+ "census": {
+  "block": 76107571,
+  "processors": 425,
+  "circuits": 11573,
+  "stateful": 3004,
+  "withRefPossible": null,
+  "medianGates": 26,
+  "maxGates": 174984
+ },
+ "sample": [
+  {
+   "cpu": "0x87bfca3494aa228ff589ab9b642143a5e8c8f9a6",
+   "id": 4940,
+   "nIn": 1,
+   "nOut": 1,
+   "nState": 1,
+   "gates": 3
+  },
+  {
+   "cpu": "0x87bfca3494aa228ff589ab9b642143a5e8c8f9a6",
+   "id": 2525,
+   "nIn": 10,
+   "nOut": 8,
+   "nState": 8,
+   "gates": 162
+  },
+  {
+   "cpu": "0x69f663931209096037474d7c20402232e5c762ca",
+   "id": 1311,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 9,
+   "gates": 10
+  },
+  {
+   "cpu": "0x87bfca3494aa228ff589ab9b642143a5e8c8f9a6",
+   "id": 3001,
+   "nIn": 6,
+   "nOut": 7,
+   "nState": 18,
+   "gates": 164
+  },
+  {
+   "cpu": "0x69f663931209096037474d7c20402232e5c762ca",
+   "id": 1017,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 9,
+   "gates": 10
+  },
+  {
+   "cpu": "0x0565ea48ca41ae559d8d491dbb0a9ec945db551b",
+   "id": 59,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x839bdd6fa7a66416a609a735e11de5411b98574e",
+   "id": 57,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x0565ea48ca41ae559d8d491dbb0a9ec945db551b",
+   "id": 41,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x5ca58d1ee9babf7c716e55a37a6f2e780250a1ba",
+   "id": 3,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x00586a4c37039acbfc6ac135cadd49367abf390a",
+   "id": 26,
+   "nIn": 18,
+   "nOut": 17,
+   "nState": 50,
+   "gates": 84
+  },
+  {
+   "cpu": "0x69f663931209096037474d7c20402232e5c762ca",
+   "id": 1225,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 9,
+   "gates": 10
+  },
+  {
+   "cpu": "0x839bdd6fa7a66416a609a735e11de5411b98574e",
+   "id": 34,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0xf044d395c91e77459e6b2155015e14f0dd9b349f",
+   "id": 80,
+   "nIn": 0,
+   "nOut": 4,
+   "nState": 4,
+   "gates": 71
+  },
+  {
+   "cpu": "0x0565ea48ca41ae559d8d491dbb0a9ec945db551b",
+   "id": 25,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x839bdd6fa7a66416a609a735e11de5411b98574e",
+   "id": 24,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0xe0ef4fffd869cbd24b2f83e6d2d83109937e05ff",
+   "id": 10,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x00586a4c37039acbfc6ac135cadd49367abf390a",
+   "id": 20,
+   "nIn": 10,
+   "nOut": 8,
+   "nState": 30,
+   "gates": 341
+  },
+  {
+   "cpu": "0xf044d395c91e77459e6b2155015e14f0dd9b349f",
+   "id": 107,
+   "nIn": 1,
+   "nOut": 1,
+   "nState": 4,
+   "gates": 15
+  },
+  {
+   "cpu": "0x57e9e1111f42f448126a9f12b2b3f99a79dd1a44",
+   "id": 1,
+   "nIn": 20,
+   "nOut": 28,
+   "nState": 1,
+   "gates": 119
+  },
+  {
+   "cpu": "0x00586a4c37039acbfc6ac135cadd49367abf390a",
+   "id": 6,
+   "nIn": 18,
+   "nOut": 17,
+   "nState": 636,
+   "gates": 670
+  },
+  {
+   "cpu": "0x5ca58d1ee9babf7c716e55a37a6f2e780250a1ba",
+   "id": 1,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0xac90a95bd11eb67a2dd83ab7ecc0ea9b521def0b",
+   "id": 2,
+   "nIn": 96,
+   "nOut": 112,
+   "nState": 64,
+   "gates": 1952
+  },
+  {
+   "cpu": "0xf044d395c91e77459e6b2155015e14f0dd9b349f",
+   "id": 96,
+   "nIn": 0,
+   "nOut": 8,
+   "nState": 8,
+   "gates": 26
+  },
+  {
+   "cpu": "0x006b107b889347dedd52019fae9daa60fce47947",
+   "id": 6,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x8a60b4a4bcf4066f5e5f9a406fe09c5e4f52a58e",
+   "id": 6,
+   "nIn": 16,
+   "nOut": 1,
+   "nState": 1,
+   "gates": 11
+  },
+  {
+   "cpu": "0x5ca58d1ee9babf7c716e55a37a6f2e780250a1ba",
+   "id": 9,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x006b107b889347dedd52019fae9daa60fce47947",
+   "id": 3,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0xe0ef4fffd869cbd24b2f83e6d2d83109937e05ff",
+   "id": 17,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x57f319cf056f72f48cf1dbb670f2a3db007aa355",
+   "id": 17,
+   "nIn": 4,
+   "nOut": 1,
+   "nState": 1,
+   "gates": 11
+  },
+  {
+   "cpu": "0x6586c806b192b167e3d56ad669ee60fcb16c3082",
+   "id": 2,
+   "nIn": 3,
+   "nOut": 7,
+   "nState": 4,
+   "gates": 112
+  },
+  {
+   "cpu": "0xdfc1abf794ef40b9eeeba1d875e7ab2b21a0a146",
+   "id": 1,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 1,
+   "gates": 55
+  },
+  {
+   "cpu": "0xac90a95bd11eb67a2dd83ab7ecc0ea9b521def0b",
+   "id": 4,
+   "nIn": 96,
+   "nOut": 112,
+   "nState": 1,
+   "gates": 114
+  },
+  {
+   "cpu": "0x99081e1d0ce916cd5b2c53e769dfc3b000bfe9a4",
+   "id": 16,
+   "nIn": 5,
+   "nOut": 4,
+   "nState": 4,
+   "gates": 28
+  },
+  {
+   "cpu": "0x006b107b889347dedd52019fae9daa60fce47947",
+   "id": 7,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0x9e2849c04a513fe64db07521cbe52d078d905c0e",
+   "id": 6,
+   "nIn": 5,
+   "nOut": 8,
+   "nState": 8,
+   "gates": 398
+  },
+  {
+   "cpu": "0xe0ef4fffd869cbd24b2f83e6d2d83109937e05ff",
+   "id": 11,
+   "nIn": 0,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 10
+  },
+  {
+   "cpu": "0xb04eb79d1a5eecaabaaff7b77d7c27578ee693ff",
+   "id": 35,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 19
+  },
+  {
+   "cpu": "0xf70d324da8c1c4cb0de3ff147e53e7e9db543c4e",
+   "id": 3,
+   "nIn": 16,
+   "nOut": 8,
+   "nState": 8,
+   "gates": 248
+  },
+  {
+   "cpu": "0x95aaacaa8aaecf6d215706d3e7fff255a35c59ed",
+   "id": 2,
+   "nIn": 6,
+   "nOut": 1,
+   "nState": 2,
+   "gates": 100
+  },
+  {
+   "cpu": "0x99081e1d0ce916cd5b2c53e769dfc3b000bfe9a4",
+   "id": 15,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 1,
+   "gates": 7
+  },
+  {
+   "cpu": "0x87bfca3494aa228ff589ab9b642143a5e8c8f9a6",
+   "id": 2327,
+   "nIn": 8,
+   "nOut": 5,
+   "nState": 0,
+   "gates": 51
+  },
+  {
+   "cpu": "0x6da7a700ab0b07e53162c7bfd14dee86f8342b06",
+   "id": 3,
+   "nIn": 30,
+   "nOut": 30,
+   "nState": 0,
+   "gates": 2355
+  },
+  {
+   "cpu": "0x60918c204f3c94630d3d793738fc36293c8405d6",
+   "id": 689,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x7ac61451fc4f128b2710949845bde3719c7756e1",
+   "id": 1,
+   "nIn": 3,
+   "nOut": 2,
+   "nState": 0,
+   "gates": 9
+  },
+  {
+   "cpu": "0x87bfca3494aa228ff589ab9b642143a5e8c8f9a6",
+   "id": 6428,
+   "nIn": 8,
+   "nOut": 4,
+   "nState": 0,
+   "gates": 114
+  },
+  {
+   "cpu": "0x87bfca3494aa228ff589ab9b642143a5e8c8f9a6",
+   "id": 170,
+   "nIn": 9,
+   "nOut": 5,
+   "nState": 0,
+   "gates": 72
+  },
+  {
+   "cpu": "0x60918c204f3c94630d3d793738fc36293c8405d6",
+   "id": 634,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x69f663931209096037474d7c20402232e5c762ca",
+   "id": 1295,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 20
+  },
+  {
+   "cpu": "0x69f663931209096037474d7c20402232e5c762ca",
+   "id": 616,
+   "nIn": 4,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0xdfc6726b0cf0b0f0f4fd1c82d67cd02972199d1d",
+   "id": 2,
+   "nIn": 9,
+   "nOut": 5,
+   "nState": 0,
+   "gates": 36
+  },
+  {
+   "cpu": "0xd8cf39e259f57ae9e634bfaf7007084b48e300dd",
+   "id": 10,
+   "nIn": 16,
+   "nOut": 16,
+   "nState": 0,
+   "gates": 652
+  },
+  {
+   "cpu": "0x60918c204f3c94630d3d793738fc36293c8405d6",
+   "id": 302,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x69f663931209096037474d7c20402232e5c762ca",
+   "id": 476,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x7f2d3131a76d9aefb49f44657da6e1acac334687",
+   "id": 68,
+   "nIn": 6,
+   "nOut": 4,
+   "nState": 0,
+   "gates": 27
+  },
+  {
+   "cpu": "0xc5a8039bd92c6c2fa5f55392819d627da6907d65",
+   "id": 1,
+   "nIn": 3,
+   "nOut": 2,
+   "nState": 0,
+   "gates": 9
+  },
+  {
+   "cpu": "0xacf892a8494919a80f5a76a7759accf04c3064e4",
+   "id": 1,
+   "nIn": 3,
+   "nOut": 2,
+   "nState": 0,
+   "gates": 9
+  },
+  {
+   "cpu": "0xb27ce8876cc0988f2d589b0b1d2886caa1002b09",
+   "id": 9,
+   "nIn": 26,
+   "nOut": 8,
+   "nState": 0,
+   "gates": 155
+  },
+  {
+   "cpu": "0xb0af3c3b940c6580a80654cb24298cbce2df81db",
+   "id": 2,
+   "nIn": 16,
+   "nOut": 16,
+   "nState": 0,
+   "gates": 652
+  },
+  {
+   "cpu": "0xfd32fbaeef90726f00aafdf2d2cf3d9c6fbd6b8d",
+   "id": 2,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x70c9a34e612e485960f602d3fca9c417fac5cc48",
+   "id": 4,
+   "nIn": 1,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 1
+  },
+  {
+   "cpu": "0x5998bd238b492d96bc44ca09b4b80d22b8f19d69",
+   "id": 9,
+   "nIn": 6,
+   "nOut": 4,
+   "nState": 0,
+   "gates": 43
+  },
+  {
+   "cpu": "0x7e743496769029c17e7134fab1ecf0b952f20e00",
+   "id": 1,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x0952bf12f53419eb8abb986d16974486b43603c9",
+   "id": 1,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 1
+  },
+  {
+   "cpu": "0x4f3b708af365b8f339dd35a8985ffe06c2553400",
+   "id": 2,
+   "nIn": 16,
+   "nOut": 16,
+   "nState": 0,
+   "gates": 1204
+  },
+  {
+   "cpu": "0x1488355fdaf9618d9092be63923159b3d3bce4cc",
+   "id": 4,
+   "nIn": 3,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 10
+  },
+  {
+   "cpu": "0x96bf873387d5d32e1751285b2815820acae35162",
+   "id": 6,
+   "nIn": 8,
+   "nOut": 3,
+   "nState": 0,
+   "gates": 63
+  },
+  {
+   "cpu": "0x603661ef64f685006335c20b239904864a3c1e6e",
+   "id": 26,
+   "nIn": 26,
+   "nOut": 8,
+   "nState": 0,
+   "gates": 52
+  },
+  {
+   "cpu": "0xdfb24ef66a30011e3d558668fd843c1d6a0d0ef1",
+   "id": 6,
+   "nIn": 8,
+   "nOut": 3,
+   "nState": 0,
+   "gates": 63
+  },
+  {
+   "cpu": "0xb04eb79d1a5eecaabaaff7b77d7c27578ee693ff",
+   "id": 19,
+   "nIn": 4,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 1
+  },
+  {
+   "cpu": "0x603661ef64f685006335c20b239904864a3c1e6e",
+   "id": 19,
+   "nIn": 26,
+   "nOut": 8,
+   "nState": 0,
+   "gates": 172
+  },
+  {
+   "cpu": "0xb8cd39a11b6122f67028eb2fcdae6085d1d08285",
+   "id": 1,
+   "nIn": 3,
+   "nOut": 2,
+   "nState": 0,
+   "gates": 9
+  },
+  {
+   "cpu": "0xf5c2bca1f38c6861f6d1303c0cbe840671ae4298",
+   "id": 22,
+   "nIn": 88,
+   "nOut": 16,
+   "nState": 0,
+   "gates": 100
+  },
+  {
+   "cpu": "0xe24983bcf577d826d439af89e389588bce141e3c",
+   "id": 15,
+   "nIn": 1,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 1500
+  },
+  {
+   "cpu": "0xf5c2bca1f38c6861f6d1303c0cbe840671ae4298",
+   "id": 94,
+   "nIn": 88,
+   "nOut": 16,
+   "nState": 0,
+   "gates": 100
+  },
+  {
+   "cpu": "0x2d81face27b3e69d7c895a2ac8f52200ad61a2fc",
+   "id": 4,
+   "nIn": 6,
+   "nOut": 4,
+   "nState": 0,
+   "gates": 43
+  },
+  {
+   "cpu": "0x96a1981e5b916e5484b9c3ecacffa976587c2839",
+   "id": 1,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x9ce1af0505aee9451b501477d60ba24a9c34cea5",
+   "id": 5,
+   "nIn": 8,
+   "nOut": 4,
+   "nState": 0,
+   "gates": 51
+  },
+  {
+   "cpu": "0xfd7b31b5a307b0c863772bb162e10d2eb4b7a819",
+   "id": 12,
+   "nIn": 9,
+   "nOut": 5,
+   "nState": 0,
+   "gates": 72
+  },
+  {
+   "cpu": "0x526b96238cc418d909005e2e2d79e327da4bd0f7",
+   "id": 2,
+   "nIn": 2,
+   "nOut": 1,
+   "nState": 0,
+   "gates": 3
+  },
+  {
+   "cpu": "0x7f2d3131a76d9aefb49f44657da6e1acac334687",
+   "id": 30,
+   "nIn": 6,
+   "nOut": 4,
+   "nState": 0,
+   "gates": 27
+  }
+ ]
+}

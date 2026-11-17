@@ -1,0 +1,27 @@
+{
+  "chainId": 196,
+  "processor": "0x1900801e311184063b9d9C119C9D98AA4950E12c",
+  "transistors": "0x523161955D1963891640A111688678Fe6a9523ea",
+  "records": "0xfbb6984752e71ae3a887a4185402bbaf46802573",
+  "instruments": {
+    "pulse": "1",
+    "triangle": "2",
+    "noise": "3",
+    "kick": "4",
+    "arp": "5"
+  },
+  "songs": {
+    "gatefold-theme": "6",
+    "mountain-king": "7",
+    "ode-to-joy": "8"
+  },
+  "block": 76108129,
+  "site": {
+    "name": "6.2.425.tape",
+    "gateway": "https://6-2-425.tapekit.org/",
+    "container": "0x909D3fb5D15B193FbCde49A382804b5aBa91E8b5",
+    "files": 10,
+    "bytes": 177564,
+    "live": true
+  }
+}

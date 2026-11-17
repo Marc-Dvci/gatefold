@@ -20,17 +20,19 @@ export function renderBeats(cs: CompiledSong, beats: number, pins: Uint8Array = 
   return out;
 }
 
-/** Map raw mixer words (0 .. 15 x channels) to 16-bit PCM around zero, with headroom. */
+/**
+ * Map raw mixer words (0 .. 15 x channels) to 16-bit PCM. Every voice is unipolar (0 is silence), so the word is scaled
+ * as it is and a DC blocker centres the result: silence stays exactly zero.
+ */
 export function toPcm16(raw: Int32Array, channels: number): Int16Array {
   const full = 15 * channels;
-  const mid = full / 2;
-  const gain = (0.9 * 32767) / mid;
+  const gain = (1.8 * 32767) / full;
   const pcm = new Int16Array(raw.length);
   // A first-order DC blocker keeps silence at zero when only some channels play.
   let x1 = 0;
   let y1 = 0;
   for (let i = 0; i < raw.length; i++) {
-    const x = (raw[i]! - mid) * gain;
+    const x = raw[i]! * gain;
     const y = x - x1 + 0.9995 * y1;
     x1 = x;
     y1 = y;

@@ -1,6 +1,8 @@
+import { resolve } from "node:path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+  resolve: { alias: { "@deployment": resolve(__dirname, "deployments/xlayer.json") } },
   test: {
     include: ["tests/**/*.test.ts"],
     exclude: ["tests/live/**"],

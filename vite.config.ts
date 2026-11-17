@@ -16,5 +16,9 @@ export default defineConfig({
     },
   },
   worker: { format: "es" },
+  resolve: {
+    // The deployment the site is built against: X Layer mainnet by default, or the file the deploy script names.
+    alias: { "@deployment": process.env.GATEFOLD_DEPLOYMENT_FILE ?? resolve(__dirname, "deployments/xlayer.json") },
+  },
   server: { port: 5173 },
 });

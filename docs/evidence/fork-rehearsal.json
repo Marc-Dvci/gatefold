@@ -1,0 +1,329 @@
+{
+  "what": "Gatefold deployment rehearsed on a local anvil fork of X Layer mainnet: real factory, processor, transistor and USD₮0 contracts at the fork block.",
+  "forkBlock": 76108106,
+  "date": "2026-11-17",
+  "deployment": {
+    "chainId": 196,
+    "processor": "0x1900801e311184063b9d9C119C9D98AA4950E12c",
+    "transistors": "0x523161955D1963891640A111688678Fe6a9523ea",
+    "records": "0xfbb6984752e71ae3a887a4185402bbaf46802573",
+    "instruments": {
+      "pulse": "1",
+      "triangle": "2",
+      "noise": "3",
+      "kick": "4",
+      "arp": "5"
+    },
+    "songs": {
+      "gatefold-theme": "6",
+      "mountain-king": "7",
+      "ode-to-joy": "8"
+    },
+    "block": 76108129,
+    "site": {
+      "name": "6.2.425.tape",
+      "gateway": "https://6-2-425.tapekit.org/",
+      "container": "0x909D3fb5D15B193FbCde49A382804b5aBa91E8b5",
+      "files": 10,
+      "bytes": 177564,
+      "live": true
+    }
+  },
+  "songs": [
+    {
+      "song": "gatefold-theme",
+      "id": "6",
+      "bytes": 6865,
+      "nand": 889,
+      "latch": 28,
+      "refs": 5,
+      "nState": 181,
+      "gates": 3381,
+      "beatsChecked": 72,
+      "matched": 72,
+      "stepGas": "8318981"
+    },
+    {
+      "song": "mountain-king",
+      "id": "7",
+      "bytes": 6600,
+      "nand": 836,
+      "latch": 28,
+      "refs": 6,
+      "nState": 217,
+      "gates": 3629,
+      "beatsChecked": 72,
+      "matched": 72,
+      "stepGas": "8957478"
+    },
+    {
+      "song": "ode-to-joy",
+      "id": "8",
+      "bytes": 5906,
+      "nand": 752,
+      "latch": 28,
+      "refs": 5,
+      "nState": 181,
+      "gates": 3244,
+      "beatsChecked": 72,
+      "matched": 72,
+      "stepGas": "7985216"
+    }
+  ],
+  "licence": {
+    "song": "gatefold-theme",
+    "price": "5000000",
+    "licensed": true,
+    "credited": "5000000",
+    "buyerBalanceAfter": "95000000",
+    "parents": 5
+  },
+  "site": {
+    "name": "6.2.425.tape",
+    "gateway": "https://6-2-425.tapekit.org/",
+    "container": "0x909D3fb5D15B193FbCde49A382804b5aBa91E8b5",
+    "files": 10,
+    "bytes": 177564,
+    "live": true
+  },
+  "transactions": [
+    {
+      "what": "approve BEM for createCPU",
+      "tx": "0x405a8b281799e60a86ded4b7a2ce57b445158709d3d87ba0ff0218e61bd7740a",
+      "gas": "46393",
+      "ms": 642
+    },
+    {
+      "what": "createCPU Gatefold",
+      "tx": "0x8885266233a7dc56f4994f016f77ed260b4076e1b538fdc288f09ebdd236919b",
+      "gas": "773887",
+      "ms": 249
+    },
+    {
+      "what": "approve BEM for transistors",
+      "tx": "0x5895c1d57b2f760111965f4959abbb51112b5298e60500fb057e2d146bf81bc7",
+      "gas": "46393",
+      "ms": 229
+    },
+    {
+      "what": "mint 4788 NAND",
+      "tx": "0xea832c11dc4fdfa454846e88eedad663121452c9e380e046bf547bda4f278323",
+      "gas": "196111",
+      "ms": 220
+    },
+    {
+      "what": "mint 237 LATCH",
+      "tx": "0xfc09ba51aba9e420a4398d056a47b7ef773d29662f87d89ee962562eecde0e21",
+      "gas": "103034",
+      "ms": 5
+    },
+    {
+      "what": "tapeout instrument pulse (1829 bytes)",
+      "tx": "0x10beea52f822099aeaa4fd672b01f6787cc39657d49c1b63173775145840944d",
+      "gas": "997458",
+      "ms": 1056
+    },
+    {
+      "what": "tapeout instrument triangle (3096 bytes)",
+      "tx": "0xf505b08157ee27e6f835808edaef6fe7145b7457a683c4999221dc5d6b6fc2f1",
+      "gas": "1479607",
+      "ms": 836
+    },
+    {
+      "what": "tapeout instrument noise (1999 bytes)",
+      "tx": "0x2dc418ef97d745db6db72032fcdd3e878697485905d24624ce2c00875e7445c9",
+      "gas": "1034149",
+      "ms": 465
+    },
+    {
+      "what": "tapeout instrument kick (5035 bytes)",
+      "tx": "0x4c34d2db8ff9536a806c65d5718a17973174b028046ca6132172bfd9bce30ad9",
+      "gas": "2272356",
+      "ms": 462
+    },
+    {
+      "what": "tapeout instrument arp (4830 bytes)",
+      "tx": "0x651364fc9d7dc8bf93c2fe4dddcc0c63778c7351d8bd575d1933bedd4fadc155",
+      "gas": "2186019",
+      "ms": 473
+    },
+    {
+      "what": "tapeout song gatefold-theme (6865 bytes)",
+      "tx": "0x55ad1f97dec7e9d76d325e4c8c329af919a189aa29357f37294a7bac6f7a7fdb",
+      "gas": "3051708",
+      "ms": 486
+    },
+    {
+      "what": "tapeout song mountain-king (6600 bytes)",
+      "tx": "0x7e6ad3cb0ec4c8befc776e0bda67141dd19b1ee95c81bca8974d927a76ef93af",
+      "gas": "2946490",
+      "ms": 498
+    },
+    {
+      "what": "tapeout song ode-to-joy (5906 bytes)",
+      "tx": "0x4e920fe59285c0fe87ec4accbca82a52a79eac5a4623384fddc9d82c7a29c532",
+      "gas": "2650733",
+      "ms": 847
+    },
+    {
+      "what": "deploy GatefoldRecords",
+      "tx": "0x98f8f2afd065d141c291c7fd660cdb51cd96e510a9d464b3f5e956f68d18860a",
+      "gas": "1764026"
+    },
+    {
+      "what": "release instrument pulse",
+      "tx": "0xfa0127798b2c64f07b4b3d79931ee70774daf52887a2a81a4914947c7024901e",
+      "gas": "245838",
+      "ms": 7
+    },
+    {
+      "what": "release instrument triangle",
+      "tx": "0xffee27f62c1aad62b775b582173ce371837c2d0c71e23edf56c9de9269e9e080",
+      "gas": "333859",
+      "ms": 660
+    },
+    {
+      "what": "release instrument noise",
+      "tx": "0x659fc277eef50c8bd5f36bfe1e5c66051f5b8dbb76368f47472dadaf00c9bc90",
+      "gas": "260359",
+      "ms": 6
+    },
+    {
+      "what": "release instrument kick",
+      "tx": "0xb4935b97781db61e105de189974e134a5c5b4093bfaf8e2a7e6e5639119a594c",
+      "gas": "472361",
+      "ms": 625
+    },
+    {
+      "what": "release instrument arp",
+      "tx": "0xb23787046af6ef7442bf366aeeaa35a596bf9a8f2ffa2126c11c90a5d3f144b6",
+      "gas": "455208",
+      "ms": 224
+    },
+    {
+      "what": "release song gatefold-theme",
+      "tx": "0xf4ea01dd16c53063e33b43c8539d4693b11c41288488a545c932a2df2399d563",
+      "gas": "724855",
+      "ms": 230
+    },
+    {
+      "what": "release song mountain-king",
+      "tx": "0x1a84f2e0748c75d863f8d51136c97d0ef0783429055ddedb137262428d0c6945",
+      "gas": "703006",
+      "ms": 231
+    },
+    {
+      "what": "release song ode-to-joy",
+      "tx": "0xe01f5b7e7ad75eb694f69f901efc7a053ef6fe0162897aea8f0c8cc95054a808",
+      "gas": "657923",
+      "ms": 614
+    },
+    {
+      "what": "licence song with a USD₮0 authorization",
+      "tx": "0x3c74debcd566b319593bb79db213c2d3f7ce91aac3e81978e8984f5730766b4a",
+      "gas": "273921",
+      "ms": 5340
+    },
+    {
+      "what": "withdraw credits",
+      "tx": "0x728d1781ac5c772b9c5304dac241827e404c74522bd7ba97fd40a2fc35799d5c",
+      "gas": "64275",
+      "ms": 640
+    },
+    {
+      "what": "open the container of circuit #6 (0.08 OKB)",
+      "tx": "0xb47b2685079e401fd0ab6a3ae37d8774f9869e7cbd0ceb8bb2b8edf6ca9e37e5",
+      "gas": "167244",
+      "ms": 2463
+    },
+    {
+      "what": "site assets/main-CjqihL8T.css chunk 1/1",
+      "tx": "0xbb67d1d181a28ec32cf1cf8032442f36b7348d4fd8ea7f535d2cbe837d06dbc9",
+      "gas": "2613448",
+      "ms": 10771
+    },
+    {
+      "what": "site assets/main-hNb1pJQw.js chunk 1/4",
+      "tx": "0x3a11bda8cfc86008f9057f4cc50a56de88abe1f4a03ac923fc1a3f2e839d2b1f",
+      "gas": "5492100",
+      "ms": 3123
+    },
+    {
+      "what": "site assets/main-hNb1pJQw.js chunk 2/4",
+      "tx": "0xe82533490841be7e6034c11efc691e4459dc080433f4808146e66b353ca3310b",
+      "gas": "5366627",
+      "ms": 1467
+    },
+    {
+      "what": "site assets/main-hNb1pJQw.js chunk 3/4",
+      "tx": "0xab92fba8115aa9b39f3d3e48f7f2a9e672b0bd8a32e06a30853e3dd3780c3c83",
+      "gas": "5366627",
+      "ms": 830
+    },
+    {
+      "what": "site assets/main-hNb1pJQw.js chunk 4/4",
+      "tx": "0x195f4caff60fc63d004ebf1e2846cf1022b3a3d869d5670152efa23b83ce4651",
+      "gas": "1627534",
+      "ms": 1243
+    },
+    {
+      "what": "site assets/worklet-DfhjATng.js chunk 1/1",
+      "tx": "0x7925cbc78dc5f25344fd77a693a54d0e420e02ec8ec481bae3018823bc48581a",
+      "gas": "1489182",
+      "ms": 3531
+    },
+    {
+      "what": "site favicon.svg chunk 1/1",
+      "tx": "0x881976b37fefee9e4810f761d23622d7c4df9a90c8d209820711098748ff076b",
+      "gas": "421637",
+      "ms": 3677
+    },
+    {
+      "what": "site fonts/big-shoulders-display-latin-800-normal.woff2 chunk 1/1",
+      "tx": "0xd160b7e9d18c12651e118d90937efc557e48c7d8e6ec7d8920d1c3370c19bafe",
+      "gas": "3487999",
+      "ms": 5112
+    },
+    {
+      "what": "site fonts/inter-tight-latin-400-normal.woff2 chunk 1/1",
+      "tx": "0x7394264da437779cd010d67fd74ee4945ed888b3c234d8ad5728f4a9e3bd3012",
+      "gas": "5104474",
+      "ms": 4116
+    },
+    {
+      "what": "site fonts/inter-tight-latin-600-normal.woff2 chunk 1/1",
+      "tx": "0x6f8bef7877740acd8a09f86e37837af5b9d78ef74838b2999e125a225e5337ea",
+      "gas": "5244015",
+      "ms": 5179
+    },
+    {
+      "what": "site fonts/jetbrains-mono-latin-400-normal.woff2 chunk 1/1",
+      "tx": "0xa4dbed7bc814dae954a277d85f6b8dda73332d6ea8fd6933bbbd9b716d18625f",
+      "gas": "4921097",
+      "ms": 5111
+    },
+    {
+      "what": "site fonts/README.md chunk 1/1",
+      "tx": "0x2f27f6130ec8e02cd7ce4a83f070f8d98ceec2cb481e5977df1ce185fcec7d6b",
+      "gas": "380061",
+      "ms": 4680
+    },
+    {
+      "what": "site index.html chunk 1/1",
+      "tx": "0x95793bd97b910c7b961a4fcb9324033c08c59525a34bc7e827f88ec76500a178",
+      "gas": "550149",
+      "ms": 3578
+    },
+    {
+      "what": "activate 6.2.425.tape for 1 month (0 OKB)",
+      "tx": "0x079e34bccfcdcfaffffb8611b586c95cce8038c5a854e74c9d7e1602019acb48",
+      "gas": "185482",
+      "ms": 2383
+    }
+  ],
+  "totalGas": "66157645",
+  "xlayerGasPriceWei": "20000001",
+  "okbForGasAtThatPrice": "0.001323152966157645",
+  "tapeoutFeesOkb": "0.0104",
+  "seconds": 98
+}
