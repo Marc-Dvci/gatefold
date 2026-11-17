@@ -22,6 +22,7 @@ import {
   createWalletClient,
   encodeAbiParameters,
   formatEther,
+  formatUnits,
   http,
   keccak256,
   parseAbi,
@@ -122,6 +123,10 @@ const bindingAbi = parseAbi([
   "function isLive(string name, address container) view returns (bool)",
 ]);
 const factoryCountAbi = parseAbi(["function cpuCount() view returns (uint256)", "function cpuAt(uint256) view returns (address)"]);
+const factoryFeeAbi = parseAbi(["function protocolFee() view returns (uint256)"]);
+// Gas of the whole live run, rounded up from the fork rehearsal (77,966,906 gas, which also handed instruments to
+// makers and bought a licence).
+const GAS_BUDGET = 80_000_000n;
 const CONTENT_TYPES: Record<string, string> = {
   html: "text/html; charset=utf-8",
   js: "text/javascript; charset=utf-8",
@@ -293,6 +298,41 @@ async function main(): Promise<void> {
     const bem = (await pub.readContract({ address: FACTORY, abi: factoryAbi, functionName: "bem" })) as Address;
     const deployFee = (await pub.readContract({ address: FACTORY, abi: factoryAbi, functionName: "deployFee" })) as bigint;
     say(`createCPU costs ${deployFee} BEM base units (token ${bem}).`);
+
+    if (!FORK) {
+      // What the run will spend, against what the deployer holds. A live run stops here, before its first
+      // transaction, when either balance is short: a run that fails halfway would pay for a second processor.
+      const cpuCount = (await pub.readContract({ address: FACTORY, abi: factoryCountAbi, functionName: "cpuCount" })) as bigint;
+      const lastCpu = (await pub.readContract({
+        address: FACTORY,
+        abi: factoryCountAbi,
+        functionName: "cpuAt",
+        args: [cpuCount - 1n],
+      })) as Address;
+      const [mintFee, tapeoutFee, openFee, monthly, gasPrice, okbHeld, bemHeld] = await Promise.all([
+        pub.readContract({ address: FACTORY, abi: factoryFeeAbi, functionName: "protocolFee" }) as Promise<bigint>,
+        pub.readContract({ address: lastCpu, abi: cpuAbi, functionName: "TAPEOUT_FEE" }) as Promise<bigint>,
+        pub.readContract({ address: OPENER, abi: openerAbi, functionName: "FEE" }) as Promise<bigint>,
+        pub.readContract({ address: BINDING, abi: bindingAbi, functionName: "monthlyFee" }) as Promise<bigint>,
+        pub.getGasPrice(),
+        pub.getBalance({ address: account.address }),
+        pub.readContract({ address: bem, abi: erc20Abi, functionName: "balanceOf", args: [account.address] }) as Promise<bigint>,
+      ]);
+      const bemNeed = deployFee + PROCESSOR.mintPrice * (needNand + needLatch) + 2n * mintFee;
+      const okbNeed = tapeoutFee * BigInt(instKeys.length + songs.length) + openFee + monthly + 2n * GAS_BUDGET * gasPrice;
+      say(
+        `Needs ${formatUnits(bemNeed, 8)} BEM and ${formatEther(okbNeed)} OKB (gas counted twice at ${formatUnits(gasPrice, 9)} gwei); ` +
+          `holds ${formatUnits(bemHeld, 8)} BEM and ${formatEther(okbHeld)} OKB.`,
+      );
+      const short = [
+        bemHeld < bemNeed ? `${formatUnits(bemNeed - bemHeld, 8)} BEM` : "",
+        okbHeld < okbNeed ? `${formatEther(okbNeed - okbHeld)} OKB` : "",
+      ].filter(Boolean);
+      if (short.length) {
+        say(`Short by ${short.join(" and ")}. Send it to ${account.address} on X Layer.`);
+        if (SEND) throw new Error("not enough funds: nothing was sent");
+      } else say("Funds cover the run.");
+    }
 
     if (FORK) {
       // Fund the fork accounts: OKB for gas and fees, BEM for the processor and transistors, USD₮0 for the buyer.
@@ -470,8 +510,10 @@ async function main(): Promise<void> {
       [USDT0, FACTORY, account.address, FEE_BPS],
     );
     const deployHash = await wallet.sendTransaction({ data: (artifact.bytecode.object + ctorArgs.slice(2)) as Hex, chain });
-    const deployReceipt = await pub.waitForTransactionReceipt({ hash: deployHash });
-    const records = deployReceipt.contractAddress!;
+    const deployReceipt = await pub.waitForTransactionReceipt({ hash: deployHash, timeout: 180_000 });
+    if (deployReceipt.status !== "success" || !deployReceipt.contractAddress)
+      throw new Error(`deploy GatefoldRecords reverted (${deployHash})`);
+    const records = deployReceipt.contractAddress;
     log.push({ what: "deploy GatefoldRecords", tx: deployHash, gas: deployReceipt.gasUsed.toString() });
     say(`GatefoldRecords at ${records}`);
     for (const k of instKeys) {
