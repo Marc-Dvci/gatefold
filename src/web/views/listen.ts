@@ -313,7 +313,10 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
     if (player.loadedKey !== key) return;
     lastState = f.state;
     die.update(f.state);
-    const s = f.beat / BEAT_RATE;
+    // The song loops back to its loop row after its last row: show the position inside the song.
+    const loopAt = ((song.loopRow ?? 0) * cs.rowBeats) / BEAT_RATE;
+    const raw = f.beat / BEAT_RATE;
+    const s = raw < seconds ? raw : loopAt + ((raw - seconds) % Math.max(0.001, seconds - loopAt));
     time.textContent = `${fmt.secs(s)} / ${fmt.secs(seconds)}`;
     for (const m of meters) {
       const v = die.word(m.nodes);

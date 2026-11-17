@@ -17,7 +17,7 @@ interface Block {
 }
 
 export function intensityFor(score: number): number {
-  return score < 8 ? 0 : score < 20 ? 1 : score < 35 ? 2 : 3;
+  return score < 3 ? 0 : score < 7 ? 1 : score < 11 ? 2 : 3;
 }
 
 export function playView(root: HTMLElement): () => void {
@@ -44,7 +44,7 @@ export function playView(root: HTMLElement): () => void {
   let blocks: Block[] = [];
   let spawn = 0;
   let bossUntil = 0;
-  let nextBoss = 40;
+  let nextBoss = 15;
   let t = 0;
   const keys = new Set<string>();
   let pointerX: number | null = null;
@@ -68,23 +68,30 @@ export function playView(root: HTMLElement): () => void {
     blocks = [];
     spawn = 0;
     bossUntil = 0;
-    nextBoss = 40;
+    nextBoss = 15;
     t = 0;
   }
 
-  /** The attract mode's pilot: steer toward the column with the least danger close above the player. */
+  /**
+   * The attract mode's pilot: for each column, the danger is how soon a block will cross the player's row there; it
+   * steers toward the safest column it can reach in time.
+   */
   function pilot(): number {
     let best = px;
-    let bestScore = Infinity;
-    for (let x = 20; x <= 940; x += 20) {
+    let bestCost = Infinity;
+    for (let x = 20; x <= 940; x += 10) {
       let danger = 0;
       for (const b of blocks) {
-        if (b.y < 160 || b.y > 520) continue;
-        if (x + 34 > b.x && x - 34 < b.x + b.w) danger += (b.y / 520) ** 3;
+        if (x + 40 <= b.x || x - 40 >= b.x + b.w) continue;
+        const eta = (490 - (b.y + 28)) / b.v;
+        if (eta < -0.2 || eta > 1.6) continue;
+        danger += 1 / (Math.max(0, eta) + 0.15);
       }
-      const cost = danger * 100 + Math.abs(x - px) / 300;
-      if (cost < bestScore) {
-        bestScore = cost;
+      // Moving takes time: a column that far away is only safe if we get there before its blocks arrive.
+      const travel = Math.abs(x - px) / 520;
+      const cost = danger * 10 + travel * 3;
+      if (cost < bestCost) {
+        bestCost = cost;
         best = x;
       }
     }
@@ -126,7 +133,7 @@ export function playView(root: HTMLElement): () => void {
   function step(dt: number): void {
     t += dt;
     const boss = t < bossUntil;
-    const speed = 160 + score * 6 + (boss ? 160 : 0);
+    const speed = 200 + score * 5 + (boss ? 160 : 0);
     const dir = (keys.has("ArrowRight") || keys.has("d") ? 1 : 0) - (keys.has("ArrowLeft") || keys.has("a") ? 1 : 0);
     const target = autopilot ? pilot() : pointerX;
     if (target !== null) px += Math.max(-1, Math.min(1, (target - px) / 30)) * 520 * dt;
@@ -136,16 +143,17 @@ export function playView(root: HTMLElement): () => void {
     if (spawn <= 0) {
       const w = 40 + Math.random() * 80;
       blocks.push({ x: Math.random() * (960 - w), y: -40, w, v: speed * (0.8 + Math.random() * 0.5) });
-      spawn = Math.max(0.18, (boss ? 0.32 : 0.75) - score * 0.008);
+      spawn = Math.max(0.18, (boss ? 0.32 : 0.5) - score * 0.006);
     }
     for (const b of blocks) b.y += b.v * dt;
     const before = blocks.length;
     blocks = blocks.filter((b) => b.y < 560);
     score += before - blocks.length;
-    for (const b of blocks) if (b.y + 28 > 490 && b.y < 518 && px + 16 > b.x && px - 16 < b.x + b.w) return over();
+    // A player who touches a block is caught; the attract mode's pilot is a demo of the music and plays on.
+    if (!autopilot) for (const b of blocks) if (b.y + 28 > 490 && b.y < 518 && px + 16 > b.x && px - 16 < b.x + b.w) return over();
     if (score >= nextBoss && !boss) {
       bossUntil = t + 12;
-      nextBoss += 40;
+      nextBoss += 30;
     }
     const level = intensityFor(score);
     song?.setIntensity(level);
@@ -223,7 +231,7 @@ export function playView(root: HTMLElement): () => void {
         h(
           "p",
           { class: "lede" },
-          "A game sets the pins of a song circuit while it plays. Your score raises the intensity pin, and each new channel joins as its layer is reached. Every 40 points a boss wave switches on the drive pin, and the tempo jumps from 116 to 168 BPM.",
+          "A game sets the pins of a song circuit while it plays. Your score raises the intensity pin, and each new channel joins as its layer is reached. At 15 points, and every 30 after, a boss wave switches on the drive pin, and the tempo jumps from 116 to 168 BPM.",
         ),
         h("div", { class: "row" }, start, watch, hud),
       ),
