@@ -7,17 +7,21 @@
 .venv/
 __pycache__/
 *.pyc
-.coverage
-.mypy_cache/
-.pytest_cache/
-.ruff_cache/
-.hypothesis/
 
-# Web
+# Node and builds
 node_modules/
-web/dist*/
+dist/
+coverage/
+test-results/
+playwright-report/
+.vite/
 
-# Runs, caches and anything made for the film stay outside the repository
-data/cache/
-data/runs/
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/*/31337/
+contracts/lib/
+
+# Scratch work, runs and anything made for the film stay outside the repository
+scratch/
 *.log
