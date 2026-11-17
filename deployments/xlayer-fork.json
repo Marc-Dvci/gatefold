@@ -2,7 +2,7 @@
   "chainId": 196,
   "processor": "0x1900801e311184063b9d9C119C9D98AA4950E12c",
   "transistors": "0x523161955D1963891640A111688678Fe6a9523ea",
-  "records": "0xd2d50e234c6826010f6029b373b5551803a1c49c",
+  "records": "0xb9eee60f47ca841c53e22d37f0c8103552abe6a2",
   "instruments": {
     "pulse": "1",
     "triangle": "2",
@@ -15,13 +15,13 @@
     "mountain-king": "7",
     "ode-to-joy": "8"
   },
-  "block": 76109682,
+  "block": 76138851,
   "site": {
     "name": "6.2.425.tape",
     "gateway": "https://6-2-425.tapekit.org/",
     "container": "0x909D3fb5D15B193FbCde49A382804b5aBa91E8b5",
     "files": 12,
-    "bytes": 210384,
+    "bytes": 226360,
     "live": true
   }
 }

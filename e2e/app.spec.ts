@@ -46,6 +46,21 @@ test("listen: every track in the list opens its own sleeve", async ({ page }) =>
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("In the Hall of the Mountain King");
 });
 
+test("listen: the licence split pays the fee, each instrument and the song owner, and adds up to the price", async ({ page }) => {
+  await offlineChain(page);
+  await page.goto("/#/listen/gatefold");
+  const panel = page.locator(".licence");
+  await expect(panel.getByRole("heading", { name: "License this song" })).toBeVisible();
+  const rows = panel.locator("table.split tbody tr");
+  await expect(rows).toHaveCount(7);
+  await expect(rows.first()).toContainText("Gatefold fee");
+  await expect(rows.last()).toContainText("Song owner");
+  const amounts = await rows.locator("td.num:last-child").allTextContents();
+  expect(amounts.reduce((s, a) => s + Math.round(Number(a) * 1e6), 0)).toBe(5_000_000);
+  await expect(panel.getByRole("button", { name: "License for 5 USD₮0" })).toBeDisabled();
+  await noSeriousAxeViolations(page);
+});
+
 test("studio: a typo is reported in its channel, and fixing it recompiles", async ({ page }) => {
   await offlineChain(page);
   await page.goto("/#/studio");
@@ -102,7 +117,7 @@ test("liner notes: the pipeline and the ecosystem table", async ({ page }) => {
   await offlineChain(page);
   await page.goto("/#/how");
   await expect(page.getByRole("heading", { name: "Liner notes" })).toBeVisible();
-  await expect(page.locator(".steps li")).toHaveCount(7);
+  await expect(page.locator(".steps li")).toHaveCount(8);
   await noSeriousAxeViolations(page);
 });
 

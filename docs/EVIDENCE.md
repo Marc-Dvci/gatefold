@@ -18,22 +18,24 @@ the contracts that run. It funds two fresh accounts on the fork, then runs the s
    `step()` with two pin settings. The chain's next state and sample must equal the local ones.
 5. Deploy Gatefold Records, release the 5 instruments and the 3 songs, and read the theme's parents from its REF
    records.
-6. Buy one licence of the theme in USD₮0 with a signed EIP-3009 authorization on the real USD₮0 contract, and withdraw
-   the credits.
+6. Hand the 5 instrument circuits to 5 makers, then buy one licence of the theme in USD₮0 through the Listen page's own
+   code ([`buyLicence`](../src/chain/records.ts)): one signed EIP-3009 authorization on the real USD₮0 contract, sent
+   to Gatefold Records. Each payee's credit must equal the split the page computes
+   ([`splitLicence`](../src/chain/records.ts)) from the lineage it reads back from the contract. Then withdraw.
 7. Build the site against this deployment, open the DeWEB container of the theme's circuit, write every file through
    the site store in 24,000-byte chunks, read each one back, and activate the name.
 
-Result, in [`docs/evidence/fork-rehearsal.json`](evidence/fork-rehearsal.json) (fork block 76,109,659):
+Result, in [`docs/evidence/fork-rehearsal.json`](evidence/fork-rehearsal.json) (fork block 76,138,823):
 
 | Step | Result |
 |---|---|
-| Transactions | 41, for 73,886,434 gas |
+| Transactions | 47, for 77,966,906 gas |
 | Songs against `step()` | 72 of 72 beats identical for each of the 3 songs (216 of 216) |
 | One `step()` of a song | 7,985,216 to 8,957,478 gas, the cost of the chain recomputing one sample with every instrument |
-| Licence | 5 USD₮0 paid with one signature; 5 parents recorded for the theme; 5,000,000 base units credited and withdrawn |
-| Site | 12 files, 210,384 bytes, identical on read-back; `6.2.425.tape` live on the fork |
+| Licence | 5 USD₮0 paid with one signature, through the page's code; 5 parents recorded for the theme; 6 payees credited exactly the page's split: 0.2925 USD₮0 to each instrument maker, 3.4125 to the song's owner, 0.125 fee |
+| Site | 12 files, 226,360 bytes, identical on read-back; `6.2.425.tape` live on the fork |
 
-What the live run costs, from the same run at X Layer's gas price of 0.02 gwei: 0.0015 OKB of gas, 0.0104 OKB of
+What the live run costs, from the same run at X Layer's gas price of 0.02 gwei: 0.0016 OKB of gas, 0.0104 OKB of
 tape-out fees (8 × 0.0013 OKB), 0.08 OKB to open the site's container, the name activation at its monthly fee (0 OKB at
 the fork block), and in BEM: 0.1 BEM for `createCPU` plus the transistors at the price the script sets.
 

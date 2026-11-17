@@ -5,7 +5,8 @@ import { decodeResult, encodeCall } from "../../chain/abi";
 import { type ChainCircuit, Processor, SEL, loadFromChain } from "../../chain/processor";
 import { JsonRpc, XLAYER } from "../../chain/rpc";
 import { flatten, simplify } from "../../core/flat";
-import { beat, bytesToHex, intToBits } from "../../core/tap02";
+import { OP_REF, beat, bytesToHex, decode, intToBits, refKey } from "../../core/tap02";
+import { DEPLOYMENT } from "../../deployments";
 import { player } from "../audio";
 import { library } from "../catalog";
 import { DieView } from "../die";
@@ -59,12 +60,13 @@ export function chainView(root: HTMLElement): () => void {
   const info = h("div", { class: "circuit-info" });
   const cpuIn = h("input", {
     type: "text",
-    value: "0xCE56B1f17B7C270A0D5e0E8a097Ae5ab71D85BD5",
+    // Gatefold's own theme once it is pressed; before that, a public TapeOut processor's first circuit.
+    value: DEPLOYMENT?.processor ?? "0xCE56B1f17B7C270A0D5e0E8a097Ae5ab71D85BD5",
     spellcheck: false,
     "aria-label": "Processor address",
     class: "mono",
   });
-  const idIn = h("input", { type: "number", value: "1", min: "1", "aria-label": "Circuit id" });
+  const idIn = h("input", { type: "number", value: DEPLOYMENT?.songs["gatefold-theme"] ?? "1", min: "1", "aria-label": "Circuit id" });
   let loaded: ChainCircuit | null = null;
   let disposed = false;
 
@@ -75,6 +77,7 @@ export function chainView(root: HTMLElement): () => void {
       const ms = Math.round(performance.now() - t0);
       if (disposed) return;
       head.textContent = `Block ${fmt.int(block)} · ${fmt.int(decodeResult(count, ["uint"])[0] as bigint)} TapeOut processors on X Layer · node answered in ${ms} ms`;
+      await open();
     } catch (e) {
       head.textContent = `X Layer did not answer: ${(e as Error).message}`;
     }
@@ -133,6 +136,8 @@ export function chainView(root: HTMLElement): () => void {
         new Uint8Array(c.circuit.nIn),
       );
       const owner = await new Processor(rpc, c.cpu).ownerOf(c.id).catch(() => "");
+      // The distinct circuits its own netlist names in REF records (instruments this page knows are not fetched again).
+      const refs = new Set(decode(c.bytes, c.info.nIn).flatMap((e) => (e.op === OP_REF ? [refKey(e.cpu, e.id)] : []))).size;
       const out = h("p", { class: "verify-out", role: "status" });
       info.replaceChildren(
         h(
@@ -142,7 +147,7 @@ export function chainView(root: HTMLElement): () => void {
           h("div", null, h("dt", null, "Gates"), h("dd", null, fmt.int(c.circuit.nGates))),
           h("div", null, h("dt", null, "State"), h("dd", null, `${c.circuit.nState} bits`)),
           h("div", null, h("dt", null, "Netlist"), h("dd", null, `${fmt.int(c.bytes.length)} bytes`)),
-          h("div", null, h("dt", null, "REF closure"), h("dd", null, `${c.closure.size} circuit${c.closure.size === 1 ? "" : "s"}`)),
+          h("div", null, h("dt", null, "References"), h("dd", null, `${refs} circuit${refs === 1 ? "" : "s"}`)),
           owner ? h("div", null, h("dt", null, "Owner"), h("dd", null, h("code", null, fmt.addr(owner)))) : null,
         ),
         h(

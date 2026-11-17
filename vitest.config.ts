@@ -5,7 +5,6 @@ export default defineConfig({
   resolve: { alias: { "@deployment": resolve(__dirname, "deployments/xlayer.json") } },
   test: {
     include: ["tests/**/*.test.ts"],
-    exclude: ["tests/live/**"],
     testTimeout: 30_000,
     sequence: { shuffle: true },
     coverage: {

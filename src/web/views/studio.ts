@@ -276,7 +276,7 @@ export function studioView(root: HTMLElement): () => void {
       error = null;
       const cs = prep.cs;
       const ms = performance.now() - t0;
-      status.textContent = `Compiled in ${ms.toFixed(0)} ms: ${fmt.int(cs.build.nand)} NAND, ${fmt.int(cs.build.latch)} LATCH, ${cs.build.refs} REF, ${fmt.int(cs.build.bytes.length)} bytes.`;
+      status.textContent = `Compiled in ${ms < 1 ? "under 1" : ms.toFixed(0)} ms: ${fmt.int(cs.build.nand)} NAND, ${fmt.int(cs.build.latch)} LATCH, ${cs.build.refs} REF, ${fmt.int(cs.build.bytes.length)} bytes.`;
       status.dataset.ok = "true";
       stats.replaceChildren(
         h("div", null, h("dt", null, "Length"), h("dd", null, fmt.secs(cs.beats / BEAT_RATE), h("small", null, ` · ${cs.rows} rows`))),

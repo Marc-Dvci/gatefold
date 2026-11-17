@@ -29,6 +29,9 @@ import {
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { defineChain } from "viem";
+import { TERMS, buyLicence, chainLineage, readOwed, releaseKey, splitLicence } from "../src/chain/records";
+import { JsonRpc } from "../src/chain/rpc";
+import type { Eip1193 } from "../src/chain/tapeout";
 import { flatten, simplify, JsEngine } from "../src/core/flat";
 import { INSTRUMENTS } from "../src/core/instruments";
 import { Library, type Song, compileSong } from "../src/core/song";
@@ -67,9 +70,10 @@ const PROCESSOR = {
   supply: 100_000_000n,
   mintPrice: 100n,
 };
-const SONG_PRICE = 5_000_000n; // 5 USD₮0
-const SONG_UPSTREAM_BPS = 3_000;
-const FEE_BPS = 250;
+// The release terms the Listen page shows: one source for the page and the deployment.
+const SONG_PRICE = TERMS.songPrice;
+const SONG_UPSTREAM_BPS = TERMS.songUpstreamBps;
+const FEE_BPS = TERMS.feeBps;
 
 const factoryAbi = parseAbi([
   "function createCPU(string name, string symbol, string story, uint256 transistorSupply, uint256 mintPrice) payable returns (address transistors, address circuits)",
@@ -86,6 +90,7 @@ const cpuAbi = parseAbi([
   "function step(uint256 id, bytes state, bytes inputs) view returns (bytes newState, bytes outputs)",
   "function ownerOf(uint256 id) view returns (address)",
   "function nextId() view returns (uint256)",
+  "function transferFrom(address from, address to, uint256 id)",
 ]);
 const transistorAbi = parseAbi([
   "function mint(uint256 id, uint256 amount) payable",
@@ -499,50 +504,89 @@ async function main(): Promise<void> {
 
     let licence: Record<string, unknown> = {};
     if (FORK) {
-      // 6. One licence in USD₮0, paid with a signed EIP-3009 authorization.
+      // 6. One licence in USD₮0, bought through the Listen page's own code (src/chain/records.ts): one signed EIP-3009
+      // authorization, sent to Gatefold Records. The instruments first go to five makers, so the credit of every payee
+      // can be held to the split the page shows.
       const buyer = privateKeyToAccount(FORK_BUYER);
       await rpc(url, "anvil_setBalance", [buyer.address, toHex(10n ** 18n)]);
       await rpc(url, "anvil_setStorageAt", [USDT0, balanceSlot(buyer.address, USDT0_BALANCE_SLOT), toHex(100_000_000n, { size: 32 })]);
+      const makers = Object.fromEntries(instKeys.map((k) => [k, privateKeyToAccount(generatePrivateKey()).address])) as Record<
+        string,
+        Address
+      >;
+      for (const k of instKeys) {
+        await send(
+          `hand instrument ${k} to its maker`,
+          processor,
+          encodeFunctionData({ abi: cpuAbi, functionName: "transferFrom", args: [account.address, makers[k]!, instIds[k]!] }),
+        );
+      }
+      const page = new JsonRpc(url);
+      const lineage = await chainLineage(page, records, songKey.toLowerCase(), (k) => k);
+      const instByKey = new Map(instKeys.map((k) => [releaseKey(processor, instIds[k]!), k]));
+      const payeeOf = (k: string): string => (instByKey.has(k) ? makers[instByKey.get(k)!]! : account.address).toLowerCase();
+      const expected = new Map<string, bigint>();
+      for (const c of splitLicence(SONG_PRICE, FEE_BPS, lineage))
+        expected.set(payeeOf(c.key), (expected.get(payeeOf(c.key)) ?? 0n) + c.amount);
       const licensee = "0x00000000000000000000000000000000006a3e01" as Address;
-      const salt = keccak256(toHex("gatefold-fork-order-1"));
-      const nonce = keccak256(
-        encodeAbiParameters([{ type: "bytes32" }, { type: "address" }, { type: "bytes32" }], [songKey, licensee, salt]),
-      );
-      const blockTime = (await pub.getBlock()).timestamp;
-      const validBefore = blockTime + 3600n;
-      const sig = await buyer.signTypedData({
-        domain: { name: "USD₮0", version: "1", chainId: 196, verifyingContract: USDT0 },
-        types: {
-          ReceiveWithAuthorization: [
-            { name: "from", type: "address" },
-            { name: "to", type: "address" },
-            { name: "value", type: "uint256" },
-            { name: "validAfter", type: "uint256" },
-            { name: "validBefore", type: "uint256" },
-            { name: "nonce", type: "bytes32" },
-          ],
+      const buyerWallet = createWalletClient({ account: buyer, chain, transport: http(url, { timeout: 120_000 }) });
+      // The browser wallet's two calls, answered by the buyer's key: eth_signTypedData_v4 and eth_sendTransaction.
+      const browserWallet: Eip1193 = {
+        async request({ method, params }) {
+          if (method === "eth_signTypedData_v4") {
+            const td = JSON.parse((params as [string, string])[1]) as {
+              domain: Record<string, unknown>;
+              types: Record<string, Array<{ name: string; type: string }>>;
+              primaryType: string;
+              message: Record<string, string>;
+            };
+            const types = Object.fromEntries(Object.entries(td.types).filter(([k]) => k !== "EIP712Domain"));
+            const message = Object.fromEntries(Object.entries(td.message).map(([k, v]) => [k, /^\d+$/.test(v) ? BigInt(v) : v]));
+            return buyer.signTypedData({ domain: td.domain, types, primaryType: td.primaryType, message } as never);
+          }
+          if (method === "eth_sendTransaction") {
+            const tx = (params as Array<{ to: Address; data: Hex }>)[0]!;
+            return buyerWallet.sendTransaction({ to: tx.to, data: tx.data, chain });
+          }
+          throw new Error(`the fork wallet does not answer ${method}`);
         },
-        primaryType: "ReceiveWithAuthorization",
-        message: { from: buyer.address, to: records, value: SONG_PRICE, validAfter: 0n, validBefore, nonce },
+      };
+      const blockTime = (await pub.getBlock()).timestamp;
+      const t = Date.now();
+      const licenceHash = (await buyLicence(
+        browserWallet,
+        {
+          account: buyer.address.toLowerCase(),
+          records,
+          cpu: processor,
+          id: songIds[firstSong]!,
+          licensee,
+          price: SONG_PRICE,
+          now: blockTime,
+        },
+        keccak256(toHex("gatefold-fork-order-1")),
+      )) as Hex;
+      const licenceReceipt = await pub.waitForTransactionReceipt({ hash: licenceHash, timeout: 180_000 });
+      if (licenceReceipt.status !== "success") throw new Error(`the licence reverted (${licenceHash})`);
+      log.push({
+        what: "licence song with a USD₮0 authorization",
+        tx: licenceHash,
+        gas: licenceReceipt.gasUsed.toString(),
+        ms: Date.now() - t,
       });
-      const r = ("0x" + sig.slice(2, 66)) as Hex;
-      const s = ("0x" + sig.slice(66, 130)) as Hex;
-      const v = parseInt(sig.slice(130, 132), 16);
-      await send(
-        "licence song with a USD₮0 authorization",
-        records,
-        encodeFunctionData({
-          abi: recordsAbi,
-          functionName: "licenseWithAuthorization",
-          args: [songKey, licensee, salt, buyer.address, 0n, validBefore, v, r, s],
-        }),
-      );
-      const owedDeployer = (await pub.readContract({
-        address: records,
-        abi: recordsAbi,
-        functionName: "owed",
-        args: [account.address],
-      })) as bigint;
+      say(`licence song with a USD₮0 authorization, through the Listen page's code: gas ${licenceReceipt.gasUsed}`);
+      const credits: Array<{ payee: string; role: string; expected: string; owed: string }> = [];
+      for (const [payee, amount] of expected) {
+        const owed = await readOwed(page, records, payee);
+        const maker = instKeys.find((k) => makers[k]!.toLowerCase() === payee);
+        credits.push({
+          payee,
+          role: maker ? `maker of ${maker}` : "song owner and treasury",
+          expected: amount.toString(),
+          owed: owed.toString(),
+        });
+        if (owed !== amount) throw new Error(`${payee} is owed ${owed}, the page's split says ${amount}`);
+      }
       const total = (await pub.readContract({ address: records, abi: recordsAbi, functionName: "totalOwed" })) as bigint;
       const ok = await pub.readContract({
         address: records,
@@ -557,7 +601,7 @@ async function main(): Promise<void> {
         args: [buyer.address],
       })) as bigint;
       say(
-        `Licence recorded: ${ok}; ${total} USD₮0 base units credited (deployer, who owns every circuit here: ${owedDeployer}); buyer left with ${buyerLeft}.`,
+        `Licence recorded: ${ok}; ${total} USD₮0 base units credited to ${credits.length} payees, each equal to the split the Listen page shows; buyer left with ${buyerLeft}.`,
       );
       await send("withdraw credits", records, encodeFunctionData({ abi: recordsAbi, functionName: "withdraw" }));
       licence = {
@@ -567,6 +611,9 @@ async function main(): Promise<void> {
         credited: total.toString(),
         buyerBalanceAfter: buyerLeft.toString(),
         parents: parents.length,
+        boughtWith: "src/chain/records.ts buyLicence, the code behind the Listen page's licence button",
+        creditsEqualThePageSplit: true,
+        credits,
       };
     }
 

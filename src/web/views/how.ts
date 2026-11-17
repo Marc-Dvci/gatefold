@@ -32,6 +32,10 @@ export function howView(root: HTMLElement): () => void {
       "Proof",
       "Any beat can be sent to the processor's own step() through eth_call: the chain returns the same next state and the same sample.",
     ],
+    [
+      "Licence",
+      "A game or a site licenses a song in USD₮0 with one signature. Gatefold Records reads the song's REF records and splits the payment: Gatefold's fee, an upstream share for the maker of each instrument, and the rest for the song's owner.",
+    ],
   ];
   const uses: Array<[string, string]> = [
     [

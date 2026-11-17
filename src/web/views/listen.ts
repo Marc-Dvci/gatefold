@@ -13,6 +13,7 @@ import { player } from "../audio";
 import { CATALOG, type CatalogSong, pinBits, prepare, songOnChain } from "../catalog";
 import { DieView } from "../die";
 import { fmt, h, sha256 } from "../ui";
+import { licencePanel } from "./licence";
 
 export interface ListenState {
   intensity: number;
@@ -278,6 +279,7 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
       h("ul", { class: "meters", "aria-label": "Channel levels" }, ...meters.map((m) => m.row)),
       scope,
       chainBox,
+      licencePanel(song, cs, onChain),
       h("p", { class: "credit" }, song.credit ?? ""),
     ),
   );

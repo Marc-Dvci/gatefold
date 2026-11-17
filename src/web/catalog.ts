@@ -12,14 +12,16 @@ import king from "../../songs/mountain-king.json";
 
 export interface CatalogSong {
   slug: string;
+  /** The song's file in songs/, which is also its key in the deployment written by scripts/deploy.ts. */
+  file: string;
   side: string;
   song: Song;
 }
 
 export const CATALOG: CatalogSong[] = [
-  { slug: "gatefold", side: "A1", song: theme as Song },
-  { slug: "mountain-king", side: "A2", song: king as Song },
-  { slug: "ode-to-joy", side: "B1", song: ode as Song },
+  { slug: "gatefold", file: "gatefold-theme", side: "A1", song: theme as Song },
+  { slug: "mountain-king", file: "mountain-king", side: "A2", song: king as Song },
+  { slug: "ode-to-joy", file: "ode-to-joy", side: "B1", song: ode as Song },
 ];
 
 let lib: Library | null = null;
@@ -78,7 +80,8 @@ export function pinBits(intensity: number, drive: boolean): Uint8Array {
   return new Uint8Array([intensity & 1, (intensity >> 1) & 1, drive ? 1 : 0]);
 }
 
-export function songOnChain(slug: string): { processor: string; id: bigint } | null {
-  const id = DEPLOYMENT?.songs[slug];
-  return DEPLOYMENT && id ? { processor: DEPLOYMENT.processor, id: BigInt(id) } : null;
+export function songOnChain(slug: string, deployment = DEPLOYMENT): { processor: string; id: bigint } | null {
+  const file = CATALOG.find((c) => c.slug === slug)?.file ?? slug;
+  const id = deployment?.songs[file];
+  return deployment && id ? { processor: deployment.processor, id: BigInt(id) } : null;
 }

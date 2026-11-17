@@ -547,6 +547,73 @@ input[type="checkbox"] {
   margin: 0.4rem 0;
 }
 
+/* License this song: the split of one payment along the REF lineage */
+.licence {
+  border-left: 3px solid var(--teal);
+  padding: 0.2rem 0 0.2rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.licence p {
+  margin: 0.4rem 0;
+}
+
+.split-bar {
+  display: flex;
+  height: 12px;
+  gap: 2px;
+  margin: 0.8rem 0 0.4rem;
+}
+
+.split-bar span {
+  flex-basis: 0;
+  min-width: 3px;
+  border-radius: 2px;
+}
+
+.split caption {
+  font: inherit;
+  font-size: 0.85rem;
+  text-transform: none;
+  caption-side: bottom;
+  padding: 0.4rem 0 0;
+}
+
+.split th[scope="row"] {
+  white-space: normal;
+  font-weight: 400;
+}
+
+.split td.num {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.split td:first-child {
+  width: 1rem;
+  padding-right: 0.5rem;
+}
+
+.swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 2px;
+  vertical-align: -0.05rem;
+}
+
+.licence label {
+  display: block;
+  margin: 0.9rem 0 0.3rem;
+}
+
+.licence input {
+  width: 100%;
+  margin-bottom: 0.7rem;
+}
+
 .verify-out[data-ok="true"],
 td[data-ok="true"],
 .txlog li[data-ok="true"],
@@ -884,5 +951,47 @@ pre.code {
 
   .meter {
     grid-template-columns: 4.5rem 6rem 1fr;
+  }
+}
+
+/* Phones: the brand and the pause button on one line, the sections on one scrolling line below. */
+@media (max-width: 640px) {
+  .top {
+    padding-top: 0.6rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .top nav {
+    order: 3;
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 1.1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .top nav a {
+    flex: none;
+  }
+
+  .now {
+    order: 2;
+    padding: 0.3rem 0.9rem;
+  }
+
+  .uses tr,
+  .uses th,
+  .uses td {
+    display: block;
+  }
+
+  .uses th[scope="row"] {
+    white-space: normal;
+    border-bottom: 0;
+    padding-bottom: 0.1rem;
+  }
+
+  .uses td {
+    padding-top: 0;
   }
 }
