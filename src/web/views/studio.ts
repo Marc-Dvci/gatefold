@@ -499,7 +499,7 @@ export function studioView(root: HTMLElement): () => void {
         : h(
             "p",
             null,
-            "Taping out opens once the Gatefold instrument circuits are on X Layer. Until then the studio compiles and plays the exact netlist a tape-out would send, with its instruments at the preview processor.",
+            `The studio compiles and plays the exact netlist a tape-out stores on the Gatefold processor, with its instruments referenced at the preview processor. A tape-out burns ${fmt.int(needN)} NAND and ${fmt.int(needL)} LATCH transistors; the instruments it references are not burned again.`,
           ),
       ...(price
         ? [

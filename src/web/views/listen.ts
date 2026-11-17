@@ -133,7 +133,7 @@ export function listenView(root: HTMLElement, slug: string | undefined): () => v
         h(
           "p",
           null,
-          `Not taped out yet. This preview plays the same netlist the tape-out sends: ${fmt.int(cs.build.bytes.length)} bytes, with its instruments referenced at the preview processor `,
+          `This page compiles the song in your browser and plays the netlist a tape-out stores on X Layer: ${fmt.int(cs.build.bytes.length)} bytes, with its instruments referenced at the preview processor `,
           h("code", null, fmt.addr(LOCAL_CPU)),
           ".",
         ),

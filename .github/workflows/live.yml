@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
 env:
-  LIVE_URL: ""
+  LIVE_URL: "https://marc-dvci.github.io/gatefold/"
   RESULTS_DATE: "2027-03-31"
 jobs:
   xlayer:

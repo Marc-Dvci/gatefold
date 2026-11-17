@@ -12,9 +12,9 @@ uses.**
 
 ![The Listen page while "Gatefold" plays: on the left the song's own circuit drawn as a chip, each cell a gate lit when it changes; on the right the track list, the netlist size against a WAV, the pins and the channel meters](docs/screens/listen.png)
 
-| On chain | Built on | Headline |
+| Live site | Built on | Headline |
 |---|---|---|
-| {{LIVE_URL}} | TapeOut circuits (NAND, LATCH, REF), processor `step()`, DeWEB, X Layer, USD₮0 | A 27-second song is a 6,865-byte TAP-02 netlist, 352 times smaller than the same audio as a CD-quality WAV, and the processor's own `step()` computes the same samples as the player: 216 of 216 beats checked |
+| [marc-dvci.github.io/gatefold](https://marc-dvci.github.io/gatefold/) | TapeOut circuits (NAND, LATCH, REF), processor `step()`, DeWEB, X Layer, USD₮0 | A 27-second song is a 6,865-byte TAP-02 netlist, 352 times smaller than the same audio as a CD-quality WAV, and the processor's own `step()` computes the same samples as the player: 216 of 216 beats checked |
 
 [For judges](#for-judges) · [See it work](#see-it-work) · [How it works](#how-it-works) ·
 [TapeOut and X Layer](#how-tapeout-and-x-layer-are-used) · [Evidence](#evidence) · [Run it](#run-it)
@@ -25,9 +25,9 @@ uses.**
 |---|---|
 | User value and commercial potential | [The problem](#the-problem) · [Business model](#business-model) · the licence panel on every song [`src/web/views/licence.ts`](src/web/views/licence.ts) · the game demo [`src/web/views/play.ts`](src/web/views/play.ts) · the embed [`src/embed/index.ts`](src/embed/index.ts) |
 | Innovation | Sound as a new medium for TapeOut circuits: the [compiler](src/core/song.ts#L157), the [ROM as a reduced decision diagram](src/core/arith.ts#L136-L177), REF composition of [instrument circuits](src/core/instruments.ts), and [royalties along the REF lineage](contracts/src/GatefoldRecords.sol#L248-L262) |
-| Ecosystem integration | [How TapeOut and X Layer are used](#how-tapeout-and-x-layer-are-used) · [the full release, rehearsed on a fork of X Layer](docs/EVIDENCE.md#1-the-full-release-on-a-fork-of-x-layer-mainnet) · [the site written into a DeWEB container](scripts/deploy.ts#L571) |
+| Ecosystem integration | [How TapeOut and X Layer are used](#how-tapeout-and-x-layer-are-used) · [the full release, rehearsed on a fork of X Layer](docs/EVIDENCE.md#1-the-full-release-on-a-fork-of-x-layer-mainnet) · [the site written into a DeWEB container](scripts/deploy.ts#L662) |
 | Product readiness and UX | Six pages ([screens](#see-it-work)) covering the whole journey: write, play, tape out, steer from a game, license, withdraw; [10 browser tests with axe-core](e2e/app.spec.ts), a [no-install quickstart](#run-it) and a Docker image |
-| Demo video | {{VIDEO_URL}} |
+| Demo video | [The film, 2:24](https://github.com/Marc-Dvci/gatefold/releases/download/v1.0.0/gatefold-film.mp4) |
 
 ## See it work
 

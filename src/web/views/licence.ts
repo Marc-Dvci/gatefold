@@ -157,7 +157,7 @@ export function licencePanel(song: Song, cs: CompiledSong, onChain: { processor:
         : h(
             "p",
             { class: "muted small" },
-            `Computed here from the song's ${instruments.size} REF records and its release terms (${TERMS.songUpstreamBps / 100} % upstream), exactly as Gatefold Records computes it on X Layer.${live ? "" : " Licences open with the song's release there."}`,
+            `Computed here from the song's ${instruments.size} REF records and its release terms (${TERMS.songUpstreamBps / 100} % upstream), exactly as Gatefold Records computes it on X Layer.`,
           ),
       h("label", { for: "licensee", class: "small" }, "Licensee: the game, site or wallet the licence is for"),
       licensee,
