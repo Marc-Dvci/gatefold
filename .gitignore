@@ -28,3 +28,4 @@ scratch/
 # Audio renders: the MP3s are committed, the WAVs go on the release
 examples/audio/*.wav
 examples/audio/*.ogg
+vitest.json
