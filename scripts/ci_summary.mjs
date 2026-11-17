@@ -23,4 +23,5 @@ for (const [file, s] of Object.entries(c)) {
 }
 const pct = ([a, b]) => (b ? ((100 * a) / b).toFixed(1) : "100.0") + " %";
 for (const [m, r] of Object.entries(rows)) out.push(`| src/${m} | ${pct(r.l)} | ${pct(r.b)} | ${pct(r.f)} |`);
-appendFileSync(process.env.GITHUB_STEP_SUMMARY ?? "/dev/stdout", out.join("\n") + "\n");
+if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, out.join("\n") + "\n");
+else console.log(out.join("\n"));
