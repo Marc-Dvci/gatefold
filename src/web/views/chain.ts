@@ -116,7 +116,7 @@ export function chainView(root: HTMLElement): () => void {
             h("td", { "data-ok": String(r.matched === r.checked) }, `${r.matched}/${r.checked}`),
           ),
         );
-        sampleOut.textContent = `${ok} of ${total} beats identical across ${circuits} circuits.`;
+        sampleOut.textContent = `${ok} of ${total} beats identical across ${circuits} circuit${circuits === 1 ? "" : "s"}.`;
       } catch {
         /* a processor without readable circuits: try another */
       }
